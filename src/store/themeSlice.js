@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = localStorage.getItem('theme') || 
-window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+const savedTheme = localStorage.getItem('theme');
+
+const initialState = savedTheme
+  ? savedTheme
+  : window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 
 const themeSlice = createSlice({
   name: 'themeSlice',
@@ -11,6 +16,7 @@ const themeSlice = createSlice({
   reducers: {   
     toggleTheme: (state) => {
       state.mode = state.mode === 'light' ? 'dark' : 'light';
+      
     }   },
 });
 
