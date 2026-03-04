@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
+       light:{
+         primary: {
           50: '#e9e3f7', 100: '#d2c7f0', 200: '#bcaae8',
           300: '#a58ee1', 400: '#8f72d9', 500: '#775fb4',
           600: '#5f4c90', 700: '#47386b', 800: '#2f2547', 900: '#161222',
@@ -21,9 +22,46 @@ module.exports = {
           50: '#ffffff', 100: '#e5e5e5', 200: '#cbcbcb',
           300: '#b1b1b1', 400: '#979797', 500: '#7d7d7d',
           600: '#636363', 700: '#494949', 800: '#2f2f2f', 900: '#151515',
+        }
+       },
+        dark:{
+          neutral: {
+          50: '#FFFFFF',
+          400: '#4F404B',
+          600: '#1B1B1B',
+          700: '#141414',
+          800: '#0D0D0D',
         },
-        dark:"#0D0D0D"
+        primary: {
+          500: '#9F86DE',
+          800: '#180E30',
+        },
+        secondary: {
+          300: '#D8C1D5',
+          500: '#A08298',
+          700: '#8A216B',
+          800: '#50123E',
+        }
+        },
       },
+      fontFamily: {
+        playfair: ['"Playfair Display"', 'serif'],
+        opensans: ['"Open Sans"', 'sans-serif'],
+      },
+      
+      fontSize: {
+        '64': '64px',
+        '48': '48px',
+        '40': '40px',
+        '28': '28px',
+        '24': '24px',
+        '20': '20px',
+        '16': '16px',
+        '14': '14px',
+        '12': '12px',
+        '11': '11px',
+        '10': '10px',
+      }
     },
   },
   plugins: [

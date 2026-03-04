@@ -6,20 +6,30 @@
 @tailwind utilities;
 
 /* Override DaisyUI theme background - let Tailwind control it */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
 :root, [data-theme] {
   background-color: transparent !important;
 }
-body{
-  font-family: "Playfair Display", serif !important;
-}
+
 .active{
   background-color: transparent !important;
-  @apply text-primary-400 !important;
+  @apply text-light-primary-400 !important;
   position: relative;
 
 }
 
-.active::after {
+.dark .active{
+  background-color: transparent !important;
+  @apply text-dark-primary-500 !important;
+  position: relative;
+
+}
+
+.desktop-menu .active::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -27,9 +37,20 @@ body{
   transform: translateX(-50%);
   width: 6px;
   height: 6px;
- @apply bg-primary-400 !important;
+ @apply bg-light-primary-400 !important;
   border-radius: 50%;
 }
+
+.mobile-menu .active::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+ @apply bg-light-primary-400 !important;
+  border-radius: 50%;
+}
+
+
 
 /* Remove hover effect from menu items (DaisyUI) */
 .menu li a:hover {
@@ -42,7 +63,7 @@ body{
 }
 .login_btn::after{
   content: '→';
- @apply text-primary-400 !important;
+ @apply text-light-primary-400 !important;
  @apply ml-2 !important;
  @apply font-bold !important;
 
