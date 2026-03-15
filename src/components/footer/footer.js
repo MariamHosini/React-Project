@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.webp";
 import { Link } from 'react-router-dom';
 export default function footer() {
   return (
     <>
         <footer className=" sm:footer-horizontal footer-center bg-transparent flex items-center justify-center ">
-            <div className='bg-light-primary-500 rounded-t-[36px] dark:bg-dark-primary-500'>
+            <div className='bg-light-primary-500 p-3 rounded-t-[36px] dark:bg-dark-primary-500'>
                 <Link to="/" >
                     <img src={logo} alt="logo" className="  w-auto h-28" />
                 </Link>

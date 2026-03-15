@@ -68,3 +68,41 @@ html, body, #root {
  @apply font-bold !important;
 
 }
+.login_btn::after:disabled{
+  content: '→';
+ @apply text-light-neutral-100 !important;
+ @apply ml-2 !important;
+ @apply font-bold !important;
+
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 0 0 1000px transparent inset;
+  -webkit-text-fill-color: #392c35 !important;
+  border: 2px solid; 
+  @apply border-light-neutral-100 !important;
+  border-radius: 9999px;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 0 0 1000px transparent inset;
+  -webkit-text-fill-color: #ffffff !important;
+  @apply border-dark-neutral-400 !important;
+  border-radius: 9999px !important;
+}
+.dark input:-webkit-autofill:focus {
+  @apply border-dark-neutral-800 !important;
+  @apply ring-2 !important;
+  @apply ring-light-secondary-600;
+  @apply outline-none;
+}
+ input:-webkit-autofill:focus {
+  @apply border-light-neutral-50 !important;
+  @apply ring-2 !important;
+  @apply ring-light-secondary-600;
+  @apply outline-none;
+}
+
+
