@@ -23,7 +23,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
     formState: { isDirty, isValid, errors },
   } = useForm({ mode: "onChange" });
       const password = watch("password","");
-      {/*Update password */}
+      // Update password
   async function handleUpdatePassword(data) {
     dispatch(startSpinner());
     const {password:newPassword} = data;

@@ -17,9 +17,9 @@ export default function Login() {
   
    const[errorMessage, setErrorMessage] = useState();
   
-   const{register , handleSubmit ,reset, formState:{errors, isValid , isDirty}} = useForm({mode:"onChange"} );
-  {/*Login */}
-    async function login(data) {
+  const{register , handleSubmit ,reset, formState:{errors, isValid , isDirty}} = useForm({mode:"onChange"} );
+  // Login
+  async function login(data) {
       const { email, password } = data;
       dispatch(startSpinner());
       try {
@@ -62,7 +62,7 @@ export default function Login() {
         <div className='flex w-[90%] lg:w-[45%] h-[83%] flex-col justify-between'>
           {/*Logo */}
           <div className='flex justify-center lg:justify-start w-[100%] lg:mt-0 mt-5 '>
-            <Link to={'/'} className='w-[50%] md:w-[30%] lg:w-[25%] h-auto'><img src={logo}></img></Link>
+            <Link to={'/'} className='w-[50%] md:w-[30%] lg:w-[25%] h-auto'><img src={logo} alt=''></img></Link>
           </div>
           {/*Form */}
           <div>
