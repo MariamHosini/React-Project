@@ -1,8 +1,8 @@
 import axios from 'axios';
-import store from '../Store/Store';
-import { stopSpinner, startSpinner } from '../Store/spinnerSlice';
+import store from '../store/store';
+import { stopSpinner, startSpinner } from '../store/spinnerSlice';
 const Instance = axios.create({
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: 'https://makeup-api.herokuapp.com/api/v1',
 });
 
 // Request interceptor

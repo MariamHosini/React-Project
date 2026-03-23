@@ -31,8 +31,6 @@ export default function ContactUs() {
       setMessage(false);
     }, 3000);
     }, 600);
-
-
   }
   return (
     <>
