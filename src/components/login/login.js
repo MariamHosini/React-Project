@@ -24,7 +24,6 @@ export default function Login() {
       dispatch(startSpinner());
       try {
         const { data: userData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-
         if (authError) {
           if (authError.message === "Invalid login credentials") {
             setErrorMessage("Incorrect email or password. Please try again.");
