@@ -22,7 +22,7 @@ export default function ForgetPassword() {
     const {email} = data;
      try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3000/reset-password'
+      redirectTo: 'https://femme-flair123.vercel.app/reset-password'
     });
     if (error) {
       throw error;
