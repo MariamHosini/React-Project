@@ -35,6 +35,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
     if (error) throw error;
     alert("Password updated successfully! 💖");
     navigate('/login');      
+
   } catch (error) {
     setErrorMessage( error.message);
   } finally {
@@ -119,7 +120,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
                   </span>
               </div>
               <p className='min-h-[30px] lg:text-16 text-14 text-[#B83280] ml-3 mt-3 mb-3'>{errors.confirmPassword?.message || ""}</p>
-              
+              {!loading ? (
                 <button
                   type="submit"
                   className="justify-center items-center rounded-full border-light-secondary-50 
@@ -128,11 +129,24 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
                               text-light-primary-400 font-playfair text-20 font-bold login_btn dark:disabled:bg-light-neutral-600
                               dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
                               disabled:bg-light-neutral-600"
-                  disabled={!isValid || !isDirty || loading}
+                  disabled={!isValid || !isDirty}
                 >
                   Update password
-                  {loading && <Spinner className="ml-1 mt-1" />}
                 </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="flex justify-center items-center rounded-full border-light-secondary-50 w-[100%]
+                              dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800
+                            bg-light-secondary-400 border-[2px] h-[50px]  lg:mb-0 mb-3 hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
+                              text-light-primary-400 font-playfair text-20 font-bold dark:disabled:bg-light-neutral-600 dark:hover:border-dark-secondary-700
+                              dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
+                              disabled:bg-light-neutral-600"
+                  disabled={!isValid || !isDirty}
+                >
+                  Update password <Spinner className="ml-1 mt-1" />
+                </button>
+              )}
 
               <div className="text-center">
                 <Link
