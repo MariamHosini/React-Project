@@ -16,7 +16,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmPassword] = useState(false);
   const dispatch = useDispatch();
-  {/*Signning function */}
+  // Signing function
 async function signUp(formData) {
   const { email, password, name } = formData;
   setErrorMessage(""); 

@@ -48,7 +48,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
           <div className="w-full max-w-md space-y-8">
         {/*Logo */}
           <div className='flex justify-center  w-[100%]  '>
-            <Link to={'/'} className='w-[50%] md:w-[30%] lg:w-[40%] h-auto'><img src={logo}></img></Link>
+            <Link to={'/'} className='w-[50%] md:w-[30%] lg:w-[40%] h-auto'><img src={logo} alt=""></img></Link>
           </div>
             <div className="text-center">
               <h2 className="text-32 lg:text-40 md:text-40  font-bold text-light-secondary-800 dark:text-dark-secondary-300">
