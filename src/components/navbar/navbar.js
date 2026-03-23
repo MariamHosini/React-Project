@@ -84,7 +84,7 @@ export default function Navbar() {
                 {!isAuth ? (
                   <Link to="login" onClick={() => closeDropdown()}>
                     <button
-                      className="login_btn mb-1 justify-center items-center rounded-full border-light-secondary-50
+                      className="mt-2 login_btn mb-1 justify-center items-center rounded-full border-light-secondary-50
 
                  bg-light-secondary-400 dark:bg-dark-secondary-800 dark:text-dark-primary-500 dark:border-dark-secondary-800
 
