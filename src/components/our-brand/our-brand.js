@@ -373,7 +373,7 @@ export default function ourBrand() {
                  bg-light-secondary-400 dark:bg-dark-secondary-800 dark:text-dark-primary-500 dark:border-dark-secondary-800
                 border-[2px] lg:h-[65px] lg:w-[180px] hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
                   text-light-primary-400  font-bold font-playfair lg:text-20 px-5
-                  text-16 h-[60px] w-[150px]"><Link to='/contact-us'>Contact Us</Link></button>
+                  text-16 h-[80px] w-[160px]"><Link to='/contact-us'>Contact Us</Link></button>
                </div>
           </div>
           {/*left side */}
