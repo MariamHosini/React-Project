@@ -94,8 +94,7 @@ export default function ForgetPassword() {
                   {errors.email?.message || ""}
                 </p>
               </div>
-              {!loading ? (
-                <button
+               <button
                   type="submit"
                   className="justify-center items-center rounded-full border-light-secondary-50 
                               dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800 dark:hover:border-dark-secondary-700
@@ -103,25 +102,11 @@ export default function ForgetPassword() {
                               text-light-primary-400 font-playfair text-20 font-bold login_btn dark:disabled:bg-light-neutral-600
                               dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
                               disabled:bg-light-neutral-600"
-                  disabled={!isValid || !isDirty}
-                >
-                  Reset password
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="flex justify-center items-center rounded-full border-light-secondary-50 w-[100%]
-                              dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-                            bg-light-secondary-400 border-[2px] h-[50px]  lg:mb-0 mb-3 hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
-                              text-light-primary-400 font-playfair text-20 font-bold dark:disabled:bg-light-neutral-600 dark:hover:border-dark-secondary-700
-                              dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
-                              disabled:bg-light-neutral-600"
-                  disabled={!isValid || !isDirty}
-                >
-                  Reset password <Spinner className="ml-1 mt-1" />
-                </button>
-              )}
-
+                  disabled={!isValid || !isDirty || loading}
+                >Reset password
+                {loading &&
+                <Spinner className="ml-1 mt-1" />
+                }</button>
               <div className="text-center">
                 <Link
                   to="/login"

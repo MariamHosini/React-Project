@@ -134,22 +134,16 @@ export default function Login() {
               </div>
               <p className='min-h-[30px] lg:text-16 text-14 text-[#B83280] ml-3 mt-2'>{errors.password?.message || ""}</p>
               {/*Login Btn */}
-              {
-                !loading?
+              
                  <button type='submit' className='justify-center items-center rounded-full border-light-secondary-50 mt-2
                dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800 dark:hover:border-dark-secondary-700
              bg-light-secondary-400 border-[2px] h-[50px] w-[90%] md:w-[70%] lg:w-[65%] lg:mb-0 mb-3 hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
               text-light-primary-400 font-playfair text-20 font-bold login_btn dark:disabled:bg-light-neutral-600
                dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
-               disabled:bg-light-neutral-600' disabled={!isValid || !isDirty}>Login</button>
-                :
-                 <button type='submit' className='flex justify-center items-center rounded-full border-light-secondary-50 mt-2
-               dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-             bg-light-secondary-400 border-[2px] h-[50px] w-[90%] md:w-[70%] lg:w-[65%] lg:mb-0 mb-3 hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
-              text-light-primary-400 font-playfair text-20 font-bold dark:disabled:bg-light-neutral-600 dark:hover:border-dark-secondary-700
-               dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
-               disabled:bg-light-neutral-600' disabled={!isValid || !isDirty}>Login <Spinner className="ml-1 mt-1"/></button>
-              }
+               disabled:bg-light-neutral-600' disabled={!isValid || !isDirty || loading}>Login
+               {loading&& <Spinner className="ml-1 mt-1"/>}
+               </button>
+               
             </form>
             <div className='w-[90%] md:w-[70%] lg:w-[65%]  flex  justify-center mt-3 mb-1'>
               <p className=' dark:text-dark-secondary-500 text-light-secondary-600 text-12 lg:text-14 font-opensans'>Don't have an account yet?<Link to={'/sign-up'} className='ml-2 login_btn text-light-primary-400 dark:text-dark-primary-500 lg:text-16 text-14 font-playfair font-bold'>Sign up</Link></p>
