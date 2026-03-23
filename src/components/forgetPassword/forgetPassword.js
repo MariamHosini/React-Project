@@ -15,6 +15,7 @@ export default function ForgetPassword() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isDirty, isValid, errors },
   } = useForm({ mode: "onChange" });
   async function sendEmail(data) {
@@ -24,6 +25,7 @@ export default function ForgetPassword() {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'https://femme-flair123.vercel.app/reset-password'
     });
+    reset();
     if (error) {
       throw error;
     }

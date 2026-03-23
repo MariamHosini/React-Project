@@ -35,7 +35,6 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
     if (error) throw error;
     alert("Password updated successfully! 💖");
     navigate('/login');      
-
   } catch (error) {
     setErrorMessage( error.message);
   } finally {
