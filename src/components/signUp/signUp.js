@@ -131,7 +131,7 @@ async function signUp(formData) {
                       deps:["confirmPassword"],
                       required: "Password is required",
                       pattern: {
-                         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$%^&*-]).{8,}$/,
+                         value:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
                         message:
                           "Min 8 chars, include upper, lower, number & special character",
                       },
