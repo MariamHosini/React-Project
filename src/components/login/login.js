@@ -140,7 +140,7 @@ export default function Login() {
              bg-light-secondary-400 border-[2px] h-[50px] w-[90%] md:w-[70%] lg:w-[65%] lg:mb-0 mb-3 hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
               text-light-primary-400 font-playfair text-20 font-bold login_btn dark:disabled:bg-light-neutral-600
                dark:disabled:text-neutral-100 dark:disabled:border-light-neutral-600 disabled:text-neutral-100
-               disabled:bg-light-neutral-600' disabled={!isValid || !isDirty || loading}>Login</button>
+               disabled:bg-light-neutral-600' disabled={!isValid || !isDirty }>Login</button>
                 :
                  <button type='submit' className='flex justify-center items-center rounded-full border-light-secondary-50 mt-2
                dark:text-dark-primary-500   dark:bg-dark-secondary-800 dark:border-dark-secondary-800
