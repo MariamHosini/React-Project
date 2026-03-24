@@ -1,6 +1,6 @@
 import React from "react";
 import image from "../../assets/Group.webp";
-
+import { useEffect, useState } from "react";
 import Select from 'react-select'
 import blush from '../../assets/blush-on.png'
 import bronzer from '../../assets/bronzer.png'
@@ -12,8 +12,28 @@ import lipliner from '../../assets/lipliner.png'
 import lipstick from '../../assets/lipstick.png'
 import mascara from '../../assets/mascara.png'
 import nailPolish from '../../assets/nail-polish.png'
+import Instance from '../../Instance/Instance'
 
-export default function products() {
+export default function Products() {
+  const [brands, setBrands] = useState([]); 
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+    Instance.get("/products/json").then((response)=>{
+      const data = response.data;
+      const uniqueBrands = [...new Set(data.map(item => item.brand))]
+        .filter(brand => brand !== null && brand !== "")
+        .sort();
+        const options = uniqueBrands.map(brand => ({
+        value: brand,
+        label: brand.charAt(0).toUpperCase() + brand.slice(1) }));
+      setBrands(options);
+      setLoading(false);
+    }).catch((error)=>{
+      console.log(error)
+    })
+    
+},[]);
 const customStyles = {
     container: (base) => ({
     ...base,
@@ -101,7 +121,9 @@ const customStyles = {
     })
   };
   function get_MakeUp_Category(category){
-    console.log(category)
+    Instance.get(`products.json?product_type=${category}`).then((response)=>{
+      
+    })
   }
   return (
     <>
@@ -224,16 +246,16 @@ const customStyles = {
             styles={customStyles}
             isSearchable={true} 
             placeholder="Search for a brand..."
+            options={brands}
           />
             <span className="absolute left-[12%] md:left-[18%] lg:left-[21%] z-10 cursor-pointer text-light-secondary-600 dark:text-dark-secondary-500 pointer-events-none"> 
 
               <i className="fa-solid fa-magnifying-glass"></i>
           </span>
         </div>
-
-
-             <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24"></div>
-      </div>
+        {/*Products */}
+        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24"></div>
+        </div>
     </>
   );
 }
