@@ -26,7 +26,7 @@ export default function Navbar() {
     <>
       <navbar className=" transition-colors duration-500 ease-in-out sticky lg:relative top-0 bg-light-neutral-50 dark:bg-dark-neutral-800 z-[2000]  flex items-center  lg:p-2 w-full max-w-full mb-3">
         {/* Mobile menu */}
-        <div className={`mt-5 flex-[7%] col-span-1 order-3 lg:hidden relative `}  >
+        <div className={`mt-5 flex-[7%] col-span-1 order-3 lg:hidden relative pb-2 `}  >
           <div className={`relative dropdown-end  `}>
             <div
               tabIndex={0}
