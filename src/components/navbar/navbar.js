@@ -24,7 +24,7 @@ export default function Navbar() {
   }
   return (
     <>
-      <navbar className=" transition-colors duration-500 ease-in-out sticky lg:relative top-0 bg-light-neutral-50 dark:bg-dark-neutral-800 z-[2000]  flex items-center lg:p-2 w-full max-w-full mb-3">
+      <div className=" transition-colors duration-500 ease-in-out sticky lg:relative top-0 bg-light-neutral-50 dark:bg-dark-neutral-800 z-[2000]  flex items-center lg:p-2 w-full max-w-full mb-3">
         {/* Mobile menu */}
         <div className={`mt-5 flex-[7%] col-span-1 order-3 lg:hidden relative  `}  >
           <div className={`relative dropdown-end  `}>
@@ -243,7 +243,7 @@ export default function Navbar() {
             text-light-primary-400 dark:text-dark-primary-500`}></i>
         </button>
         </div>
-      </navbar>
+      </div>
     </>
   );
 }
