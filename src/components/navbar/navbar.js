@@ -34,7 +34,8 @@ export default function Navbar() {
               className="btn btn-ghost lg:hidden relative z-[110]"
               onClick={() => toggleMenu()}
             >
-                <input type="checkbox" />
+              <label className="btn  swap swap-rotate">
+            <input type="checkbox" />
         {isOpen ? (
 
          <svg
@@ -56,8 +57,7 @@ export default function Navbar() {
           viewBox="0 0 512 512">
           <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
         </svg>
-        )}
-      
+        )}</label>
             </div>
             <ul className={` absolute  menu menu-sm dropdown-content mt-7 bg-light-neutral-50 dark:bg-dark-neutral-800 
                w-screen p-5 shadow mobile-menu
