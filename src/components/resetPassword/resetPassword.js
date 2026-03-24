@@ -38,7 +38,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
       setTimeout(() => {
       setMessage(false);
       navigate('/login');    
-    }, 3000);
+    }, 2000);
       
 
   } catch (error) {
@@ -165,7 +165,7 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
             </form>
           </div>
             {message &&
-          <div className="toast toast-center">
+          <div className="toast toast-center toast-middle">
             <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
               <span>Password updated successfully!</span>
             </div>
