@@ -244,7 +244,7 @@ const customStyles = {
             className="lg:w-[60%] md:w-[70%] w-[90%]"
             styles={customStyles}
             isSearchable={true} 
-            placeholder="Search for a brand..."
+            placeholder="Search for a ..."
             options={brands}
           />
             <span className="absolute left-[12%] md:left-[18%] lg:left-[21%] z-10 cursor-pointer text-light-secondary-600 dark:text-dark-secondary-500 pointer-events-none"> 
