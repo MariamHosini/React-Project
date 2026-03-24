@@ -1,6 +1,6 @@
 import React from "react";
 import image from "../../assets/Group.webp";
-import Instance from '../../Instance/Instance'
+
 import Select from 'react-select'
 import blush from '../../assets/blush-on.png'
 import bronzer from '../../assets/bronzer.png'
