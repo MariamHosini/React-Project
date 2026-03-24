@@ -16,7 +16,6 @@ import Instance from '../../Instance/Instance'
 
 export default function Products() {
   const [brands, setBrands] = useState([]); 
-const [loading, setLoading] = useState(true);
 
 useEffect(() => {
     Instance.get("/products/json").then((response)=>{
@@ -28,7 +27,7 @@ useEffect(() => {
         value: brand,
         label: brand.charAt(0).toUpperCase() + brand.slice(1) }));
       setBrands(options);
-      setLoading(false);
+
     }).catch((error)=>{
       console.log(error)
     })
