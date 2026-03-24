@@ -10,6 +10,7 @@ import supabase from "../../supabaseClient";
 import { useState  } from "react";
 import { useNavigate } from "react-router-dom";
 export default function ResetPassword() {
+  const[message , setMessage]= useState(false);
 const navigate =useNavigate();
 const [showPassword, setShowPassword] = useState(false);
 const [showConfirmPassword, setConfirmPassword] = useState(false);
@@ -33,8 +34,12 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
     });
 
     if (error) throw error;
-    alert("Password updated successfully! 💖");
-    navigate('/login');      
+    setMessage(true);
+      setTimeout(() => {
+      setMessage(false);
+      navigate('/login');    
+    }, 3000);
+      
 
   } catch (error) {
     setErrorMessage( error.message);
@@ -159,6 +164,12 @@ const [showConfirmPassword, setConfirmPassword] = useState(false);
               </div>
             </form>
           </div>
+            {message &&
+          <div className="toast toast-center">
+            <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
+              <span>Password updated successfully!</span>
+            </div>
+          </div>}
         </div>
     </>
   );
