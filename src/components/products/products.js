@@ -19,7 +19,7 @@ export default function Products() {
 
 useEffect(() => {
     Instance.get("/products/json").then((response)=>{
-      const data = response.data;
+      const data = JSON.parse(response.data.contents);
       const uniqueBrands = [...new Set(data.map(item => item.brand))]
         .filter(brand => brand !== null && brand !== "")
         .sort();
