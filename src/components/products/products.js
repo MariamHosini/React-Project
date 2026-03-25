@@ -415,8 +415,8 @@ function get_MakeUp_Category(category) {
                 return(
                   <div key={product.id} id={`product-${product.id}`} className=" p-3 md:p-5 rounded-xl border-[3px] border-gray-100 
                   dark:border-2 dark:border-dark-neutral-400 flex flex-col  justify-center items-center gap-y-3 "> 
-                    <div className="overflow-hidden h-32 md:h-52 w-full flex justify-center ">
-                          <img src={product.image_link} alt={product.name} className=" h-full w-auto
+                    <div className="overflow-hidden h-44 md:h-64 w-full flex justify-center ">
+                          <img src={product.image_link} alt={product.name} className=" h-auto w-full
                           transition-transform duration-300 ease-in-out hover:scale-110 "
                         onError={(e) => {
                               const card = e.target.closest(`#product-${product.id}`);
@@ -446,7 +446,7 @@ function get_MakeUp_Category(category) {
                       dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[90%]
                         hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
                       text-light-primary-400 font-playfair text-16 md:text-20 font-bold" >
-                        Add to <i className="ml-1 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
+                        Add to <i className="ml-2 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
                       </button>
                       <i class="fa-regular fa-heart text-16 md:text-[20px] cursor-pointer  dark:text-dark-secondary-800 text-light-secondary-400"></i>
                       </div>
