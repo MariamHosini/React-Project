@@ -12,27 +12,26 @@ import lipliner from '../../assets/lipliner.png'
 import lipstick from '../../assets/lipstick.png'
 import mascara from '../../assets/mascara.png'
 import nailPolish from '../../assets/nail-polish.png'
-import Instance from '../../Instance/Instance'
-
+import {products} from '../../data/mock_data.js'
 export default function Products() {
-  const [brands, setBrands] = useState([]); 
-
+  const [brands, setBrands] = useState(); 
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [allproducts , setAllProducts] = useState([]);
+  const [classifiedProducts , setClassifiedProducts] = useState([]);
 useEffect(() => {
-    Instance.get("/products/json").then((response)=>{
-      const data = JSON.parse(response.data.contents);
-      const uniqueBrands = [...new Set(data.map(item => item.brand))]
+    if (products && products.length > 0) {
+      setAllProducts(products);  
+      setClassifiedProducts(products.slice(0,50)); 
+      const uniqueBrands = [...new Set(products.map(item => item.brand))]
         .filter(brand => brand !== null && brand !== "")
         .sort();
-        const options = uniqueBrands.map(brand => ({
+      const options = uniqueBrands.map(brand => ({
         value: brand,
-        label: brand.charAt(0).toUpperCase() + brand.slice(1) }));
-      setBrands(options);
-
-    }).catch((error)=>{
-      console.log(error)
-    })
-    
-},[]);
+        label: brand.charAt(0).toUpperCase() + brand.slice(1) 
+      }));
+      setBrands([{value:"1" , label:"All Brands"}, ...options]);
+    }
+}, [products]); 
 const customStyles = {
     container: (base) => ({
     ...base,
@@ -77,7 +76,7 @@ const customStyles = {
     input: (base) => ({
       ...base,
       marginLeft: '26px',
-      color: 'inherit',
+      color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#161222',
       backgroundColor: 'transparent',
     }),
 
@@ -91,23 +90,19 @@ const customStyles = {
     option: (base, state) => ({
       ...base,
       backgroundColor: state.isSelected 
-        ? '#775fb4' 
+        ? '#786171' 
         : 'transparent',
-      color: state.isSelected ? '#ffffff' : (document.documentElement.classList.contains('dark') ? '#D8C1D5' : '#5f4c90'),
+      color: state.isSelected ? '#ffffff' : (document.documentElement.classList.contains('dark') ? '#c9a3be' : '#5f4c90'),
       cursor: 'pointer',
-      '&:hover': {
-        backgroundColor: state.isSelected ? '#775fb4' : 'transparent',
-      }
+      
     }),
 
     menu: (base) => ({
       ...base,
-      backgroundColor:'transparent',
-      borderRadius: '20px',
+      backgroundColor: (document.documentElement.classList.contains('dark') ? '#151515' : '#ffffff'),
+      borderRadius: '15px',
       border: '2px solid ',
-      borderColor:  
-       (document.documentElement.classList.contains('dark') ? '#392c35' : '#c9a3be'),
-    
+      borderColor:  (document.documentElement.classList.contains('dark') ? '#a08298' : '#786171'),
       overflow: 'hidden',
       zIndex: 50
     }),
@@ -118,12 +113,22 @@ const customStyles = {
       color: '#a08298',
       '&:hover': { color: '#a08298' }
     })
+  
   };
-  function get_MakeUp_Category(category){
-    Instance.get(`products.json?product_type=${category}`).then((response)=>{
-      
-    })
-  }
+function get_MakeUp_Brand(brand) {
+    setSelectedOption(brand);
+    if (!brand || brand.value === "1") {
+      setClassifiedProducts(allproducts);
+    } 
+    else {
+      const filtered = allproducts.filter((item) => item.brand === brand.value);
+      setClassifiedProducts(filtered);
+    }
+}
+function get_MakeUp_Category(category) {
+  const filtered = allproducts.filter((item) => item.product_type === category);
+  setClassifiedProducts(filtered);
+}
   return (
     <>
       <div className="flex flex-col px-0 md:px-12 lg:px-6 items-center">
@@ -145,98 +150,216 @@ const customStyles = {
             Start creating your dream look today.
           </p>
         </div>
-        {/*Search icons */}
-        <div className="w-[95%] hidden lg:grid lg:grid-cols-4 xl:grid-cols-5 place-items-stretch  gap-x-4 gap-y-6 mt-16 md:mt-18 lg:mt-24">
+        {/*selection statment */}
+        <div className="w-[95%] flex justify-center mt-16 md:mt-18 lg:mt-24">
+          <p className="text-[36px] md:text-40 lg:text-48 font-bold font-playfair text-light-secondary-800  dark:text-dark-secondary-500 ">Shop by Category</p>
+        </div>
+        {/*Search icons in tablet & laptop*/}
+        <div className="w-[95%] hidden lg:grid  lg:grid-cols-5 place-items-stretch  gap-x-4 gap-y-6 md:mt-18 lg:mt-24">
           {/*blush */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("blush")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+            <div className=" flex justify-center items-center md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
               <img src={blush} alt="blush" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Blush</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Blush</p>
             </div>
           </div>
            {/*bronzer */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("bronzer")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={bronzer} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={bronzer} alt="bronzer" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Bronzer</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Bronzer</p>
             </div>
           </div>
           {/*eye-brow */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyebrow")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={eyebrow} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={eyebrow} alt="eye-brow" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Eyebrow</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Eyebrow</p>
             </div>
           </div>
           {/*eye-liner */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyeliner")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={eyeliner} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={eyeliner} alt="eyeliner" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Eyeliner</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Eyeliner</p>
             </div>
           </div>
           {/*eye-shadow */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyeshadow")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={eyeshadow} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={eyeshadow} alt="eye-shadow" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Eyeshadow</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Eyeshadow</p>
             </div>
           </div>
           {/*foundation */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("foundation")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={foundation} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={foundation} alt="foundation" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Foundation</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfairmd:text-16 lg:text-20 xl:text-24 font-bold">Foundation</p>
             </div>
           </div>
-          {/*foundation */}
-          <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("lipliner")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={lipliner} alt="blush" className="w-[70%] h-[70%]"/>
+          {/*lipliner */}
+          <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("lip_liner")}>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={lipliner} alt="lipliner" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Lipliner</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Lipliner</p>
             </div>
           </div>
           {/*lipstick */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("lipstick")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={lipstick} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={lipstick} alt="lipstick" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Lipstick</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Lipstick</p>
             </div>
           </div>
           {/*mascrara */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("mascara")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={mascara} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={mascara} alt="mascara" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Mascara</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Mascara</p>
             </div>
           </div>
-          {/*lipstick */}
+          {/*nail_polish */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("nail_polish")}>
-            <div className=" flex justify-center items-center md:h-16 md:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
-              <img src={nailPolish} alt="blush" className="w-[70%] h-[70%]"/>
+            <div className=" flex justify-center items-center  md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500">
+              <img src={nailPolish} alt="lipstick" className="w-[70%] h-[70%]"/>
             </div>
             <div>
-              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-24 font-bold">Nail Polish</p>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair md:text-16 lg:text-20 xl:text-24 font-bold">Nail Polish</p>
             </div>
           </div>
+        </div>
+        {/*Search icons in  mobile */}
+        <div className="carousel w-[90%] mt-14 flex lg:hidden  gap-4 ">
+          {/*Blush */}
+          <div className="carousel-item w-[30%] md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("blush")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={blush} alt="blush" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Blush</p>
+            </div>
+          </div>
+          </div>
+          {/*bronzer */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("bronzer")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={bronzer} alt="bronzer" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Bronzer</p>
+            </div>
+          </div>
+          </div>
+          {/*eye-brow */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyebrow")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={eyebrow} alt="eyebrow" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Eyebrow</p>
+            </div>
+          </div>
+          </div>
+          {/*eye-liner */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyeliner")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={eyeliner} alt="eyeliner" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Eyeliner</p>
+            </div>
+          </div>
+          </div>
+         {/*eye-shadow */}
+          <div className="carousel-item w-[35%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("eyeshadow")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={eyeshadow} alt="eyeshadow" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Eyeshadow</p>
+            </div>
+          </div>
+          </div>
+         {/*foundation */}
+          <div className="carousel-item w-[35%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("foundation")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={foundation} alt="foundation" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Foundation</p>
+            </div>
+          </div>
+          </div>
+          {/*lipliner */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("lip_liner")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={lipliner} alt="lipliner" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Lipliner</p>
+            </div>
+          </div>
+          </div>
+         {/*lipstick */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("lipstick")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={lipstick} alt="lipstick" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Lipstick</p>
+            </div>
+          </div>
+          </div>
+          {/*mascara */}
+          <div className="carousel-item w-[30%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("mascara")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={mascara} alt="mascara" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Mascara</p>
+            </div>
+          </div>
+          </div>
+          {/*nail_polish */}
+          <div className="carousel-item w-[35%]  md:w-[20%]">
+            <div className="flex flex-col gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("nail_polish")}>
+            <div className=" flex justify-center items-center h-14 w-14  rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
+              <img src={nailPolish} alt="nail_polish" className="w-[70%] h-[70%]"/>
+            </div>
+            <div>
+              <p className="text-light-secondary-900 dark:text-dark-secondary-300 font-playfair text-20  font-bold">Nail Polish</p>
+            </div>
+          </div>
+          </div>
+
         </div>
         {/*Search tap */}
         <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24">
@@ -245,7 +368,9 @@ const customStyles = {
             styles={customStyles}
             isSearchable={true} 
             placeholder="Search for a brand..."
+            value={selectedOption}
             options={brands}
+            onChange={(option)=>get_MakeUp_Brand(option)}
           />
             <span className="absolute left-[12%] md:left-[18%] lg:left-[21%] z-10 cursor-pointer text-light-secondary-600 dark:text-dark-secondary-500 pointer-events-none"> 
 
@@ -253,7 +378,11 @@ const customStyles = {
           </span>
         </div>
         {/*Products */}
-        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24"></div>
+        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24">
+          {
+            classifiedProducts.map()
+          }
+        </div>
         </div>
     </>
   );
