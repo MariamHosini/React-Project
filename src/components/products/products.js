@@ -448,7 +448,7 @@ function get_MakeUp_Category(category) {
                       text-light-primary-400 font-playfair text-16 md:text-20 font-bold" >
                         Add to <i className="ml-1 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
                       </button>
-                      <i class="fa-regular fa-heart text-16 md:text-[20px] cursor-pointer text-light-secondary-400"></i>
+                      <i class="fa-regular fa-heart text-16 md:text-[20px] cursor-pointer  dark:text-dark-secondary-800 text-light-secondary-400"></i>
                       </div>
                     </div>
                   </div>
