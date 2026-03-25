@@ -17,7 +17,7 @@ export default function Products() {
   const [brands, setBrands] = useState(); 
   const [selectedOption, setSelectedOption] = useState(null);
   const [allproducts , setAllProducts] = useState([]);
-  const [classifiedProducts , setClassifiedProducts] = useState([]);
+  const [ , setClassifiedProducts] = useState([]);
 useEffect(() => {
     if (products && products.length > 0) {
       setAllProducts(products);  
@@ -379,9 +379,7 @@ function get_MakeUp_Category(category) {
         </div>
         {/*Products */}
         <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24">
-          {
-            classifiedProducts.map()
-          }
+          
         </div>
         </div>
     </>
