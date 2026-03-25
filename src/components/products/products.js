@@ -430,7 +430,7 @@ function get_MakeUp_Category(category) {
                               });
                             }}/>
                     </div>
-                    <div className="w-full flex flex-col  items-center h-[9rem] md:h-32">
+                    <div className="w-full flex flex-col  items-center h-[9rem] md:h-36">
                       <div className="h-24 flex items-center justify-center">
                         <p className="first-letter:uppercase text-light-secondary-900 dark:text-dark-secondary-300 text-[16px] md:text-24
                        lg:text-28 font-bold font-playfair text-center">
@@ -440,10 +440,10 @@ function get_MakeUp_Category(category) {
                       <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12
                       first-letter:uppercase">{product.product_type}</p>
                       <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12">{product.price}$</p>
-                      <div className=" w-[100%] h-20 md:h-20 flex justify-between items-center">
+                      <div className=" w-[100%] h-20 md:h-28 flex justify-between items-center">
                         <button className=" flex justify-center items-center rounded-md border-light-secondary-50
                       dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-                      dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[85%]
+                      dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[85%] h-[100%]
                         hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
                       text-light-primary-400 font-playfair text-[18px] md:text-20 font-bold" >
                         Add to <i className="ml-2 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
