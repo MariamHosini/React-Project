@@ -443,12 +443,12 @@ function get_MakeUp_Category(category) {
                       <div className=" w-[100%] h-12 md:h-20 flex justify-between items-center">
                         <button className=" flex justify-center items-center rounded-md border-light-secondary-50
                       dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-                      dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[90%]
+                      dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[85%]
                         hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
                       text-light-primary-400 font-playfair text-16 md:text-20 font-bold" >
                         Add to <i className="ml-2 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
                       </button>
-                      <i class="fa-regular fa-heart text-16 md:text-[20px] cursor-pointer  dark:text-dark-secondary-800 text-light-secondary-400"></i>
+                      <i class="fa-regular fa-heart text-24 md:text-[26px] cursor-pointer  dark:text-dark-secondary-800 text-light-secondary-400"></i>
                       </div>
                     </div>
                   </div>
