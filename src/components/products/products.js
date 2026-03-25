@@ -151,11 +151,11 @@ function get_MakeUp_Category(category) {
           </p>
         </div>
         {/*selection statment */}
-        <div className="w-[95%] flex justify-center mt-16 md:mt-18 lg:mt-24">
+        <div className="w-[95%] flex justify-center mt-16 md:mt-18 lg:mt-20">
           <p className="text-[36px] md:text-40 lg:text-48 font-bold font-playfair text-light-secondary-800  dark:text-dark-secondary-500 ">Shop by Category</p>
         </div>
         {/*Search icons in tablet & laptop*/}
-        <div className="w-[95%] hidden lg:grid  lg:grid-cols-5 place-items-stretch  gap-x-4 gap-y-6 md:mt-18 lg:mt-24">
+        <div className="w-[95%] hidden lg:grid  lg:grid-cols-5 place-items-stretch  gap-x-4 gap-y-6 md:mt-18 lg:mt-20">
           {/*blush */}
           <div className="flex gap-3 items-center cursor-pointer"   onClick={()=>get_MakeUp_Category("blush")}>
             <div className=" flex justify-center items-center md:h-14 md:w-14 xl:h-16 xl:w-16 rounded-2xl bg-light-secondary-100 dark:bg-dark-secondary-500 ">
@@ -362,7 +362,7 @@ function get_MakeUp_Category(category) {
 
         </div>
         {/*Search tap */}
-        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24">
+        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-20">
           <Select
             className="lg:w-[60%] md:w-[70%] w-[90%]"
             styles={customStyles}
