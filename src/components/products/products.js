@@ -31,7 +31,7 @@ useEffect(() => {
       }));
       setBrands([{value:"1" , label:"All Brands"}, ...options]);
     }
-}, [products]); 
+}, []); 
 const customStyles = {
     container: (base) => ({
     ...base,
