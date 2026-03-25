@@ -17,11 +17,20 @@ export default function Products() {
   const [brands, setBrands] = useState(); 
   const [selectedOption, setSelectedOption] = useState(null);
   const [allproducts , setAllProducts] = useState([]);
-  const [ , setClassifiedProducts] = useState([]);
+  const [ ClassifiedProducts, setClassifiedProducts] = useState([]);
+  const [isLoading,setIsLoading] = useState(false);
+  const [error , setError] = useState(false);
+  const [ , setCounter] =useState();
+  
 useEffect(() => {
     if (products && products.length > 0) {
-      setAllProducts(products);  
-      setClassifiedProducts(products.slice(0,50)); 
+      setClassifiedProducts(products.filter(item => item.brand !== null && item.brand !== "").slice(150,250)); 
+      setAllProducts(products.filter(item => item.brand !== null && item.brand !== ""));  
+      setCounter(200)
+      setIsLoading(true);
+      setTimeout(()=>{
+        setIsLoading(false);
+      },2000);
       const uniqueBrands = [...new Set(products.map(item => item.brand))]
         .filter(brand => brand !== null && brand !== "")
         .sort();
@@ -116,18 +125,31 @@ const customStyles = {
   
   };
 function get_MakeUp_Brand(brand) {
+    setError(false)
     setSelectedOption(brand);
+    setIsLoading(true);
     if (!brand || brand.value === "1") {
-      setClassifiedProducts(allproducts);
+      setClassifiedProducts(allproducts.slice(150,250));
+      setCounter(allproducts.length);
     } 
     else {
       const filtered = allproducts.filter((item) => item.brand === brand.value);
       setClassifiedProducts(filtered);
+      setCounter(filtered.length)
     }
+    setTimeout(()=>{
+        setIsLoading(false);
+   },3000);
 }
 function get_MakeUp_Category(category) {
+  setIsLoading(true)
+  setError(false);
   const filtered = allproducts.filter((item) => item.product_type === category);
   setClassifiedProducts(filtered);
+  setCounter(filtered.length)
+      setTimeout(()=>{
+        setIsLoading(false);
+   },3000);
 }
   return (
     <>
@@ -378,10 +400,88 @@ function get_MakeUp_Category(category) {
           </span>
         </div>
         {/*Products */}
-        <div className="relative w-full flex justify-center items-center mt-14 md:mt-18 lg:mt-24">
+        {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-20 w-full">
+          <div className="w-12 h-12 border-4 border-light-secondary-100 border-t-light-secondary-800 dark:border-dark-secondary-500 dark:border-t-dark-neutral-800 rounded-full animate-spin"></div>
+          <p className="mt-4 font-playfair text-lg text-light-secondary-800 dark:text-dark-secondary-300 animate-pulse">
+            Preparing your beauty shelf...
+          </p>
+        </div>
+      ):
+        !error?
+          (<div className="mb-20 px-3 md:px-0 w-full  grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-8 place-items-stretch mt-5 md:mt-10 lg:mt-12">
+            {
+              ClassifiedProducts.map((product)=>{
+                return(
+                  <div key={product.id} id={`product-${product.id}`} className=" p-3 md:p-5 rounded-xl border-[3px] border-gray-100 
+                  dark:border-2 dark:border-dark-neutral-400 flex flex-col  justify-center items-center gap-y-3 "> 
+                    <div className="overflow-hidden h-32 md:h-52 w-full flex justify-center ">
+                          <img src={product.image_link} alt={product.name} className=" h-full w-auto
+                          transition-transform duration-300 ease-in-out hover:scale-110 "
+                        onError={(e) => {
+                              const card = e.target.closest(`#product-${product.id}`);
+                              if (card) card.style.display = 'none';
+                              setCounter((prevCount) => {
+                                const nextCount = prevCount - 1;
+                                if (nextCount <= 0) {
+                                  setError(true);
+                                }
+                                return nextCount;
+                              });
+                            }}/>
+                    </div>
+                    <div className="w-full flex flex-col  items-center h-[8rem] md:h-32">
+                      <div className="h-24 flex items-center justify-center">
+                        <p className="first-letter:uppercase text-light-secondary-900 dark:text-dark-secondary-300 text-[16px] md:text-24
+                       lg:text-28 font-bold font-playfair text-center">
+                        {product.brand}</p>
+                      </div>
+                      
+                      <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12
+                      first-letter:uppercase">{product.product_type}</p>
+                      <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12">{product.price}$</p>
+                      <div className=" w-[100%] h-12 md:h-20 flex justify-between items-center">
+                        <button className=" flex justify-center items-center rounded-md border-light-secondary-50
+                      dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
+                      dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[90%]
+                        hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
+                      text-light-primary-400 font-playfair text-16 md:text-20 font-bold" >
+                        Add to <i className="ml-1 fa-solid fa-cart-arrow-down text-light-primary-400 text-[12px] md:text-[16px] dark:text-dark-primary-500 "></i>
+                      </button>
+                      <i class="fa-regular fa-heart text-16 md:text-[20px] cursor-pointer text-light-secondary-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>)
+          :
+          (<div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+             <div className="bg-pink-50 p-6 rounded-full mb-6">
+            <svg 
+              className="w-16 h-16 text-pink-300" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-dark-secondary-500 mb-2">
+            Oops! Beauty Sleep Mode
+          </h2>
+
+          <p className="text-gray-500 max-w-md leading-relaxed dark:text-dark-secondary-300">
+            It looks like our beauty shelf is empty for this category. 
+            Don't worry, your perfect glow is just a click away in our other collections!
+          </p>
+         </div>)
+       }
+        
           
-        </div>
-        </div>
+     </div>
     </>
   );
 }

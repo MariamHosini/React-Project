@@ -168,7 +168,7 @@ export default function Navbar() {
             hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800  transition-colors duration-200
             "
           >
-            <i className="fa-solid fa-cart-arrow-down text-light-primary-400 text-[16px] md:text-[20px] dark:text-dark-primary-500 "></i>
+            <i className="fa-solid fa-cart-arrow-down text-light-primary-400 text-[18px] md:text-[20px] dark:text-dark-primary-500 "></i>
           </div>
           {!isAuth ? (
             <Link to="login">
