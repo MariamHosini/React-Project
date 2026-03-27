@@ -16,7 +16,7 @@ import { useLocation } from 'react-router-dom';
 import Profile from './components/profile/profile';
 import ForgetPassword from './components/forgetPassword/forgetPassword'
 import ResetPassword from './components/resetPassword/resetPassword';
-
+import OneProduct from './components/one_product/one_product'
 function App() {
   const location = useLocation();
   const noNavbar = ['/login' , '/sign-up' , '/forget-password' , '/reset-password']
@@ -35,6 +35,7 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blogPost/:id" element={<BlogPost />} />
+          <Route path="/one-product/:id" element={<OneProduct />} />
           <Route path="/login" element={!isAuthenticated ?<Login /> : <Navigate to="/"/>} />
           <Route path="/sign-up" element={!isAuthenticated ?<SignUp /> : <Navigate to="/"/>} />
           <Route path="/profile/:userId" element={<Profile />} />
