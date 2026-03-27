@@ -118,11 +118,10 @@ option: (base, state) => ({
     ...base,
     marginBottom:'2px',
     backgroundColor: state.isSelected ? '#786171' : 'transparent',
-    color: state.isSelected 
+   color: state.isSelected 
       ? '#ffffff' 
-      : (document.documentElement.classList.contains('dark') ? '#c9a3be' : '#5f4c90'),
-    backgroundColor: state.isFocused && !state.isSelected ? 'transparent' : state.isSelected ? '#786171' : 'transparent',
-    
+      : 'var(--select-option-color)',
+   
     '&:hover': {
       backgroundColor: '#786171 !important',
       color: '#ffffff !important',

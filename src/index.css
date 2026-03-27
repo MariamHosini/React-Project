@@ -106,3 +106,9 @@ input:-webkit-autofill {
 }
 
 
+:root {
+  --select-option-color: #5f4c90;
+}
+.dark {
+  --select-option-color: #c9a3be;
+}
