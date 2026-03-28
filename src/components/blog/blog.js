@@ -124,7 +124,7 @@ export default function blog() {
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover hover:scale-110 ease-in-out transition-all duration-300"
             />
             <div className=" flex flex-col gap-3 p-4 dark:border-b-light-secondary-700 border-b-[2px] 
             dark:border-x-light-secondary-700 border-x-[2px] rounded-b-2xl ">

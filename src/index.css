@@ -112,3 +112,11 @@ input:-webkit-autofill {
 .dark {
   --select-option-color: #c9a3be;
 }
+
+
+
+/* الـ Class ده هيخلي الـ Gradient يتقسم خطوط مستقيمة مش ناعمة */
+.palette-stripes {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}

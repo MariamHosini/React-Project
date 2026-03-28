@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import image from "../../assets/Group.webp";
 import { useEffect, useState } from "react";
 import Select from 'react-select'
@@ -14,12 +14,15 @@ import lipstick from '../../assets/lipstick.png'
 import mascara from '../../assets/mascara.png'
 import nailPolish from '../../assets/nail-polish.png'
 import {products} from '../../data/mock_data.js'
+import {useSelector} from 'react-redux'
 export default function Products() {
+  const isAuth = useSelector(store=>store.auth.isAuthenticated)
   const navigate =useNavigate();
+  const [searchParams , setSearchParams]= useSearchParams();
   const [brands, setBrands] = useState(); 
   const [selectedOption, setSelectedOption] = useState(null);
   const [allproducts , setAllProducts] = useState([]);
-  const [ ClassifiedProducts, setClassifiedProducts] = useState([]);
+  const [ClassifiedProducts, setClassifiedProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
   const [error , setError] = useState(false);
   const categories =[
@@ -34,26 +37,12 @@ export default function Products() {
     {id:9,cat_name:"Mascara",cat_class:"mascara",cat_image:mascara},
     {id:10,cat_name:"Nail Polish",cat_class:"nail_polish",cat_image:nailPolish},
   ]
-  const generateRandomPrice = () => {
-  const min = 10;
-  const max = 60;
-  const random = Math.random() * (max - min) + min;
-  return random.toFixed(2); 
-};
 useEffect(() => {
     if (products && products.length > 0) {
-      if (products) {
-    const productsWithPrices = products.map(product => ({
-       ...product,
-      price: product.price && product.price !== "0.0" 
-             ? product.price 
-             : generateRandomPrice()
-    }));
-    
-    get_validate_product(productsWithPrices.filter(item => item.brand !== null && item.brand !== "").slice(200,300)); 
+   const productsWithPrices = products
+  .filter(p => p.price && p.price !== "0.0" && p.price !== null) 
     setAllProducts(productsWithPrices);
-  }
-      const uniqueBrands = [...new Set(products.map(item => item.brand))]
+    const uniqueBrands = [...new Set(products.map(item => item.brand))]
         .filter(brand => brand !== null && brand !== "")
         .sort();
       const options = uniqueBrands.map(brand => ({
@@ -63,6 +52,24 @@ useEffect(() => {
       setBrands([{value:"1" , label:"All Brands"}, ...options]);
     }
 }, []); 
+useEffect(() => {
+    if (allproducts.length > 0) {
+        const cat = searchParams.get("category");
+        const brd = searchParams.get("brand");
+        let filtered = [...allproducts];
+        if (cat && cat !== "") {
+            filtered = filtered.filter(item => item.product_type === cat);
+        }
+        if (brd && brd !== "1") {
+            filtered = filtered.filter(item => item.brand === brd);
+        }
+        if (!cat && (!brd || brd === "1")) {
+            get_validate_product(allproducts.filter(item => item.brand).slice(200, 300));
+        } else {
+            get_validate_product(filtered);
+        }
+    }
+}, [searchParams, allproducts]); 
 const customStyles = {
     container: (base) => ({
     ...base,
@@ -152,17 +159,16 @@ option: (base, state) => ({
   };
 function get_MakeUp_Brand(brand) {
     setSelectedOption(brand);
-    if (!brand || brand.value === "1") {
-      get_validate_product(allproducts.slice(200,400))
-    } 
-    else {
-      const filtered = allproducts.filter((item) => item.brand === brand.value);
-      get_validate_product(filtered)
-    }
+    setSearchParams({
+    category:searchParams.get("category")||"",
+    brand:brand.value
+  })
 }
-function get_MakeUp_Category(category) {
-  const filtered = allproducts.filter((item) => item.product_type === category);
-  get_validate_product(filtered);
+function get_MakeUp_Category(cat) {
+  setSearchParams({
+    category:cat,
+    brand:searchParams.get('brand') || "1"
+  })
 }
 async function get_validate_product(products_List){
   setIsLoading(true);
@@ -170,7 +176,7 @@ async function get_validate_product(products_List){
   function check_Image(product){
       return new Promise((resolve)=>{
           const img = new Image();
-          img.src = product.image_link;
+          img.src = product.api_featured_image;
           img.onload = ()=>resolve(product)
           img.onerror = ()=>resolve(null)
       })
@@ -187,11 +193,16 @@ async function get_validate_product(products_List){
 }
 function go_to_product(id){
   const new_id=btoa(id);
-  console.log(new_id)
   navigate(`/one-product/${new_id}`);
+}
+function loveProduct(){
+  if(!isAuth){
+    navigate("/login")
+  }
 }
   return (
     <>
+    
       <div className="flex flex-col px-0 md:px-12 lg:px-6 items-center">
         {/*Top image */}
         <div
@@ -289,29 +300,30 @@ function go_to_product(id){
                     <div key={product.id || index} id={`product-${product.id}`} className=" p-3 md:p-5 rounded-xl border-[3px] border-gray-100 
                     dark:border-2 dark:border-dark-neutral-400 flex flex-col  justify-center items-center gap-y-3 "> 
                       <div className="overflow-hidden h-44 md:h-64 w-full flex justify-center ">
-                            <img src={product.image_link} alt={product.name} className=" h-auto w-full
+                            <img src={product.api_featured_image} alt={product.name} className=" h-auto w-full
                             transition-transform duration-300 ease-in-out hover:scale-110 "/>
                       </div>
-                      <div className="w-full flex flex-col  items-center h-[9rem] md:h-36">
+                      <div className="w-full flex flex-col  items-center h-[9rem] md:h-44">
                         <div className="h-24 flex items-center justify-center">
-                          <p className="first-letter:uppercase text-light-secondary-900 dark:text-dark-secondary-300 text-[16px] md:text-24
-                        lg:text-28 font-bold font-playfair text-center">
+                          <p className="first-letter:uppercase text-light-secondary-900 dark:text-dark-secondary-300 text-[16px]
+                           md:text-24 font-bold font-playfair text-center">
                           {product.brand}</p>
                         </div>
                         
                         <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12
                         first-letter:uppercase">{product.product_type}</p>
-                        <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12">{product.price* 50} EGP</p>
+                        <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12">{(product.price* 50).toFixed(0)} EGP</p>
                         <div className=" w-[100%] h-20 md:h-28 flex justify-between items-center">
                           <button className=" flex justify-center items-center rounded-md border-light-secondary-50
                         dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-                        dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[80%] h-[100%]
+                        dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[80%] h-[80%]
                           hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
                         text-light-primary-400 font-playfair text-[16px] md:text-20 font-bold"
                         onClick={()=>{go_to_product(product.id)}} >
                         Read more
                         </button>
-                        <i className="fa-regular fa-heart text-24 md:text-[26px] cursor-pointer  dark:text-dark-secondary-800 text-light-secondary-400"></i>
+                        <i className="fa-regular fa-heart text-24 md:text-[26px] cursor-pointer 
+                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{loveProduct()}}></i>
                         </div>
                       </div>
                     </div>

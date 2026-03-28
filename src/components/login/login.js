@@ -43,7 +43,7 @@ export default function Login() {
           const nameToShow = profileData?.name || userData.user.email;
           dispatch(setLogin({ ...userData.user, userName: nameToShow }));
           reset();
-          navigate("/");
+          navigate(-1);
         }
       } catch (err) {
         console.error(err);
