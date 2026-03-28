@@ -62,7 +62,8 @@ useEffect(() => {
         setSelectedOption(allOptions[0]);
       }
     }
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 useEffect(() => {
     if (allproducts.length > 0) {
         const cat = searchParams.get("category");
