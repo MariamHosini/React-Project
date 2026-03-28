@@ -39,19 +39,30 @@ export default function Products() {
   ]
 useEffect(() => {
     if (products && products.length > 0) {
-   const productsWithPrices = products
-  .filter(p => p.price && p.price !== "0.0" && p.price !== null) 
-    setAllProducts(productsWithPrices);
-    const uniqueBrands = [...new Set(products.map(item => item.brand))]
+      const filteredData = products.filter(p => p.price && p.price !== "0.0" && p.price !== null);
+      setAllProducts(filteredData);
+
+      const uniqueBrands = [...new Set(products.map(item => item.brand))]
         .filter(brand => brand !== null && brand !== "")
         .sort();
+
       const options = uniqueBrands.map(brand => ({
         value: brand,
-        label: brand.charAt(0).toUpperCase() + brand.slice(1) 
+        label: brand.charAt(0).toUpperCase() + brand.slice(1)
       }));
-      setBrands([{value:"1" , label:"All Brands"}, ...options]);
+
+      const allOptions = [{ value: "1", label: "All Brands" }, ...options];
+      setBrands(allOptions);
+
+      const brdInUrl = searchParams.get("brand");
+      if (brdInUrl && allOptions.length > 0) {
+        const active = allOptions.find(opt => opt.value === brdInUrl);
+        setSelectedOption(active || allOptions[0]);
+      } else {
+        setSelectedOption(allOptions[0]);
+      }
     }
-}, []); 
+  }, [])
 useEffect(() => {
     if (allproducts.length > 0) {
         const cat = searchParams.get("category");
