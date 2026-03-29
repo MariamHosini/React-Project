@@ -324,7 +324,7 @@ function loveProduct(){
                         
                         <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12
                         first-letter:uppercase">{product.product_type}</p>
-                        <p className="text-light-secondary-600 text-14 md:text-[18px] text-center font-playfair h-12">{(product.price* 50).toFixed(0)} EGP</p>
+                        <p className="text-light-secondary-800 dark:text-dark-secondary-300 font-medium mt-1 text-14 md:text-[18px] text-center font-playfair h-12">{(product.price* 50).toFixed(0)} EGP</p>
                         <div className=" w-[100%] h-20 md:h-28 flex justify-between items-center">
                           <button className=" flex justify-center items-center rounded-md border-light-secondary-50
                         dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800

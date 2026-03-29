@@ -5,6 +5,7 @@ import logo from "../../assets/logo.webp";
 import { setLogout } from "../../store/authSlice";
 import { useState } from "react";
 export default function Navbar() {
+  const numberOfProducts = useSelector(store=>store.cart.productNumbers);
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
   const isAuth = useSelector((store) => store.auth.isAuthenticated);
@@ -166,10 +167,12 @@ export default function Navbar() {
             className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-xl border-light-secondary-50 border-[2px]
             flex items-center justify-center cursor-pointer dark:border-dark-neutral-700
             hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
-            p-6 md:p-5 text-center  transition-colors duration-200
+            p-6 md:p-5 text-center  transition-colors duration-200 relative
             "
           >
-            <i className="fa-solid fa-cart-arrow-down text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
+            <p className="text-light-primary-400 dark:text-dark-primary-500 absolute text-[19px] font-semibold
+            -top-3 -right-0">{numberOfProducts}</p>
+            <i className="fa-solid fa-cart-shopping text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
           </div>
           {!isAuth ? (
             <Link to="login">
