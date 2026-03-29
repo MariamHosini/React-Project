@@ -6,20 +6,27 @@ import spinnerReducer from './spinnerSlice';
 import authReducer from './authSlice';
 import cartReducer from './cartSlice';
 
-const persistConfig = {
+const authPersistConfig = {
   key: 'auth',
   storage,
   whitelist: ['user', 'isAuthenticated'] 
 };
+const cartPersistConfig = {
+  key: 'cart',
+  storage,
+  whitelist: ['productData', 'productNumbers'] 
+};
 
-const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
+
 
 const store = configureStore({
   reducer: {
     theme: themeReducer,
     spinner: spinnerReducer,
     auth: persistedAuthReducer, 
-    cart: cartReducer, 
+    cart: persistedCartReducer, 
   },
   
   middleware: (getDefaultMiddleware) =>

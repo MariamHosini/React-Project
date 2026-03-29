@@ -1,11 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { products } from "../../data/mock_data";
-import {useDispatch} from 'react-redux'
+import {useDispatch , useSelector} from 'react-redux'
 import { addProduct } from "../../store/cartSlice";
 export default function One_product() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate =useNavigate();
+  const isAuth = useSelector(store=>store.auth.isAuthenticated)
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(false);
@@ -48,8 +50,9 @@ export default function One_product() {
           hex_value: firstColor.hex_value,
         });
       }
-      })();
       setLoading(false);
+      })();
+      
     }
   }, [id]);
   function add_to_cart(pID) {
@@ -59,6 +62,11 @@ export default function One_product() {
     numberOfProduct: count
   }));
   }
+  function addToWishList(){
+  if(!isAuth){
+    navigate("/login")
+  }
+}
   return (
     <>
       <div className="flex items-stretch px-5 md:px-12 lg:px-6 mt-10 mb-10 ">
@@ -104,6 +112,8 @@ export default function One_product() {
                       {product.category}
                     </p>
                   )}
+                  <i className="ml-auto fa-regular fa-heart text-24 md:text-[26px] cursor-pointer 
+                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{addToWishList()}}></i>
                 </div>
                 {/*descripton */}
                 <p
@@ -216,11 +226,6 @@ export default function One_product() {
                 onClick={() => {
                   add_to_cart(product.id);
                 }}
-                disabled={
-                  !selectedColor &&
-                  product.product_type !== "eyeshadow" &&
-                  product.product_colors.length !== 0
-                }
               >
                 Add to <i className="fa-solid fa-cart-shopping"></i>
                 </button>

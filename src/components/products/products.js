@@ -207,7 +207,7 @@ function go_to_product(id){
   const new_id=btoa(id);
   navigate(`/one-product/${new_id}`);
 }
-function loveProduct(){
+function addToWishList(){
   if(!isAuth){
     navigate("/login")
   }
@@ -335,7 +335,7 @@ function loveProduct(){
                         Read more
                         </button>
                         <i className="fa-regular fa-heart text-24 md:text-[26px] cursor-pointer 
-                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{loveProduct()}}></i>
+                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{addToWishList()}}></i>
                         </div>
                       </div>
                     </div>
