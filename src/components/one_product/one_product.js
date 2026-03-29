@@ -20,9 +20,7 @@ export default function One_product() {
         setLoading(true);
         const data  = await new Promise((resolve)=>{
             const singleProduct = products.find(p=>String(p.id) === new_id)
-            resolve(singleProduct)
-            console.log(singleProduct)
-            
+            resolve(singleProduct)     
         })
         setProduct({...data,stock:generateRandomStock()});
         })();
@@ -47,8 +45,14 @@ export default function One_product() {
                         </div>
                         <p className='text-light-secondary-700 text-24 md:text-28 font-bold font-playfair 
                         dark:text-dark-secondary-500'>{product.name}</p>
+                        {product.category?
                         <p className=' text-20 md:text-24 font-bold font-playfair first-letter:uppercase
-                        text-light-secondary-500 dark:text-dark-secondary-700'>{product.category}</p>
+                        text-light-secondary-500 dark:text-dark-secondary-700'>{product.category} - {product.product_type}</p>
+                            :
+                             <p className=' text-20 md:text-24 font-bold font-playfair first-letter:uppercase
+                        text-light-secondary-500 dark:text-dark-secondary-700'>{product.product_type}</p>
+                        }
+                       
                         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
                             {product.product_type !=="eyshadow"&&
                                 product.product_colors.map((color)=>{

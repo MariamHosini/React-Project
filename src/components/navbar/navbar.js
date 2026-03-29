@@ -165,7 +165,8 @@ export default function Navbar() {
           <div
             className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-xl border-light-secondary-50 border-[2px]
             flex items-center justify-center cursor-pointer dark:border-dark-neutral-700
-            hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800  transition-colors duration-200
+            hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
+            p-6 md:p-5 text-center  transition-colors duration-200
             "
           >
             <i className="fa-solid fa-cart-arrow-down text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
