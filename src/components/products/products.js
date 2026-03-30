@@ -15,6 +15,7 @@ import mascara from '../../assets/mascara.png'
 import nailPolish from '../../assets/nail-polish.png'
 import {products} from '../../data/mock_data.js'
 import {useSelector} from 'react-redux'
+import supabase from '../../supabaseClient'
 export default function Products() {
   const isAuth = useSelector(store=>store.auth.isAuthenticated)
   const navigate =useNavigate();
@@ -25,6 +26,9 @@ export default function Products() {
   const [ClassifiedProducts, setClassifiedProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
   const [error , setError] = useState(false);
+    const[loved , setLoved] = useState(false);
+    const [toastMessageBody , setToatMessageBody] = useState("");
+    const [message , setMessage] = useState(false);
   const categories =[
     {id:1,cat_name:"Blush",cat_class:"blush",cat_image:blush},
     {id:2,cat_name:"Bronzer",cat_class:"bronzer",cat_image:bronzer},
@@ -37,52 +41,7 @@ export default function Products() {
     {id:9,cat_name:"Mascara",cat_class:"mascara",cat_image:mascara},
     {id:10,cat_name:"Nail Polish",cat_class:"nail_polish",cat_image:nailPolish},
   ]
-useEffect(() => {
-    if (products && products.length > 0) {
-      const filteredData = products.filter(p => p.price && p.price !== "0.0" && p.price !== null);
-      setAllProducts(filteredData);
-
-      const uniqueBrands = [...new Set(products.map(item => item.brand))]
-        .filter(brand => brand !== null && brand !== "")
-        .sort();
-
-      const options = uniqueBrands.map(brand => ({
-        value: brand,
-        label: brand.charAt(0).toUpperCase() + brand.slice(1)
-      }));
-
-      const allOptions = [{ value: "1", label: "All Brands" }, ...options];
-      setBrands(allOptions);
-
-      const brdInUrl = searchParams.get("brand");
-      if (brdInUrl && allOptions.length > 0) {
-        const active = allOptions.find(opt => opt.value === brdInUrl);
-        setSelectedOption(active || allOptions[0]);
-      } else {
-        setSelectedOption(allOptions[0]);
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-useEffect(() => {
-    if (allproducts.length > 0) {
-        const cat = searchParams.get("category");
-        const brd = searchParams.get("brand");
-        let filtered = [...allproducts];
-        if (cat && cat !== "") {
-            filtered = filtered.filter(item => item.product_type === cat);
-        }
-        if (brd && brd !== "1") {
-            filtered = filtered.filter(item => item.brand === brd);
-        }
-        if (!cat && (!brd || brd === "1")) {
-            get_validate_product(allproducts.filter(item => item.brand).slice(200, 300));
-        } else {
-            get_validate_product(filtered);
-        }
-    }
-}, [searchParams, allproducts]); 
-const customStyles = {
+  const customStyles = {
     container: (base) => ({
     ...base,
     outline: 'none',
@@ -169,6 +128,50 @@ option: (base, state) => ({
     })
   
   };
+useEffect(() => {
+    if (products && products.length > 0) {
+      const filteredData = products.filter(p => p.price && p.price !== "0.0" && p.price !== null && p.brand !=="" && p.brand!==null);
+      setAllProducts(filteredData);
+      const uniqueBrands = [...new Set(products.map(item => item.brand))]
+        .filter(brand => brand !== null && brand !== "")
+        .sort();
+
+      const options = uniqueBrands.map(brand => ({
+        value: brand,
+        label: brand.charAt(0).toUpperCase() + brand.slice(1)
+      }));
+
+      const allOptions = [{ value: "1", label: "All Brands" }, ...options];
+      setBrands(allOptions);
+
+      const brdInUrl = searchParams.get("brand");
+      if (brdInUrl && allOptions.length > 0) {
+        const active = allOptions.find(opt => opt.value === brdInUrl);
+        setSelectedOption(active || allOptions[0]);
+      } else {
+        setSelectedOption(allOptions[0]);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+useEffect(() => {
+    if (allproducts.length > 0) {
+        const cat = searchParams.get("category");
+        const brd = searchParams.get("brand");
+        let filtered = [...allproducts];
+        if (cat && cat !== "") {
+            filtered = filtered.filter(item => item.product_type === cat);
+        }
+        if (brd && brd !== "1") {
+            filtered = filtered.filter(item => item.brand === brd);
+        }
+        if (!cat && (!brd || brd === "1")) {
+            get_validate_product(allproducts.filter(item => item.brand).slice(200, 400));
+        } else {
+            get_validate_product(filtered);
+        }
+    }
+}, [searchParams, allproducts]); 
 function get_MakeUp_Brand(brand) {
     setSelectedOption(brand);
     setSearchParams({
@@ -207,15 +210,60 @@ function go_to_product(id){
   const new_id=btoa(id);
   navigate(`/one-product/${new_id}`);
 }
-function addToWishList(){
+  async function addToWishList(pID){
   if(!isAuth){
     navigate("/login")
+  }
+  else{
+    const nextLovedState = !loved; 
+   setLoved(nextLovedState);
+    if(nextLovedState){
+        const { error } = await supabase
+      .from('wishlist') 
+      .insert([{ product_Id: pID }]);
+      if(error){
+        setLoved(false)
+        setMessage(true)
+        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
+      else{
+        setMessage(true)
+        setToatMessageBody("Added Succesfully to your wishlist 🤍");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
+    }
+    else{
+        const { error } = await supabase
+      .from('wishlist') 
+      .delete()
+      .eq("product_Id" ,pID );
+      if(error){
+        setLoved(true)
+        setMessage(true)
+        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
+      else{
+        setMessage(true)
+        setToatMessageBody("Removed Succesfully from your wishlist.");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
+    }
   }
 }
   return (
     <>
     
       <div className="flex flex-col px-0 md:px-12 lg:px-6 items-center">
+         {/*wishlist Message */}
+       { message&&
+        <div className="toast toast-end ">
+                <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
+                    <span>{toastMessageBody}</span>
+                </div>
+            </div>
+        }
         {/*Top image */}
         <div
           className="flex flex-col justify-center items-center bg-light-primary-400 bg-cover bg-no-repeat bg-center w-full lg:h-[300px] md:h-[250px] h-[350px] 
@@ -309,11 +357,19 @@ function addToWishList(){
               {
                 ClassifiedProducts.map((product,index)=>{
                   return(
-                    <div key={product.id || index} id={`product-${product.id}`} className=" p-3 md:p-5 rounded-xl border-[3px] border-gray-100 
-                    dark:border-2 dark:border-dark-neutral-400 flex flex-col  justify-center items-center gap-y-3 "> 
-                      <div className="overflow-hidden h-44 md:h-64 w-full flex justify-center ">
-                            <img src={product.api_featured_image} alt={product.name} className=" h-auto w-full
-                            transition-transform duration-300 ease-in-out hover:scale-110 "/>
+                    <div key={product.id || index} id={`product-${product.id}`} className={` p-3 md:p-5 rounded-xl flex flex-col justify-center 
+                      items-center gap-y-2
+                      ${product.stock===0?`border-[2px] border-red-400`
+                      :`border-[3px] border-gray-100 dark:border-2 dark:border-dark-neutral-400`}`}> 
+                      <div className="overflow-hidden h-44 md:h-64 w-full flex flex-col items-center ">
+                            <div className="h-[90%] w-full flex justify-center overflow-hidden">
+                              <img loading="lazy" src={product.api_featured_image} alt={product.name} className={`h-[100%] w-auto
+                            ${product.stock===0?`opacity-40`:`opacity-100 transition-transform duration-300 ease-in-out hover:scale-110`} `}/>
+                            </div>
+                            {product.stock ===0 &&
+                            <p className="text-white bg-red-900 w-[100%] text-center text-12 md:text-16 ">OUT OF STOCK</p>
+
+                            }
                       </div>
                       <div className="w-full flex flex-col  items-center h-[9rem] md:h-44">
                         <div className="h-24 flex items-center justify-center">
@@ -334,8 +390,9 @@ function addToWishList(){
                         onClick={()=>{go_to_product(product.id)}} >
                         Read more
                         </button>
-                        <i className="fa-regular fa-heart text-24 md:text-[26px] cursor-pointer 
-                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{addToWishList()}}></i>
+                        <i className={` fa-heart text-24 md:text-[26px] cursor-pointer 
+                          dark:text-dark-secondary-800 text-light-secondary-400
+                          ${loved && isAuth?`fa-solid`:`fa-regular`}`} onClick={()=>{addToWishList(product.id)}}></i>
                         </div>
                       </div>
                     </div>

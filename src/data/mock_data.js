@@ -1,4 +1,4 @@
-export const products = [
+ const rawProducts = [
   {
     "id": 1048,
     "brand": "colourpop",
@@ -42177,3 +42177,5 @@ export const products = [
     ]
   }
 ]
+
+export const products = rawProducts.map(p => ({...p, stock: Math.floor(Math.random() * 21)}))

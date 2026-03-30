@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { products } from "../../data/mock_data";
 import {useDispatch , useSelector} from 'react-redux'
 import { addProduct } from "../../store/cartSlice";
+import supabase from '../../supabaseClient'
 export default function One_product() {
   const dispatch = useDispatch();
   const navigate =useNavigate();
@@ -12,14 +13,10 @@ export default function One_product() {
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
-
-  const generateRandomStock = () => {
-    const min = 0;
-    const max = 20;
-    const random = Math.random() * (max - min) + min;
-    return random.toFixed(0);
-  };
   const [count, setCount] = useState(1);
+  const[loved , setLoved] = useState(false);
+  const [toastMessageBody , setToatMessageBody] = useState("");
+  const [message , setMessage] = useState(false);
   function incrementCount(){
     setCount(prev=>{
         if(prev<product.stock){return prev+1}
@@ -33,6 +30,9 @@ export default function One_product() {
     })
   }
   useEffect(() => {
+    if(!isAuth){
+        setLoved(false);
+    }
     if (id && id != null) {
       const new_id = atob(id);
       (async () => {
@@ -41,10 +41,9 @@ export default function One_product() {
           const singleProduct = products.find((p) => String(p.id) === new_id);
           resolve(singleProduct);
         });
-        const fullProduct = { ...data, stock: generateRandomStock() };
-      setProduct(fullProduct);
-      if (fullProduct?.product_colors?.length > 0) {
-        const firstColor = fullProduct.product_colors[0];
+      setProduct(data);
+      if (data?.product_colors?.length > 0) {
+        const firstColor = data.product_colors[0];
         setSelectedColor({
           color: firstColor.colour_name,
           hex_value: firstColor.hex_value,
@@ -54,6 +53,7 @@ export default function One_product() {
       })();
       
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   function add_to_cart(pID) {
     dispatch(addProduct({
@@ -62,23 +62,69 @@ export default function One_product() {
     numberOfProduct: count
   }));
   }
-  function addToWishList(){
-  if(!isAuth){
-    navigate("/login")
+async function addToWishList(pID) {
+  if (!isAuth) return navigate("/login");
+
+  // 1. اعكسي شكل القلب فوراً (Optimistic UI) عشان البنت تحس بالسرعة
+  const isAdding = !loved; 
+  setLoved(isAdding);
+
+  if (isAdding) {
+    const { error } = await supabase
+      .from('wishlist')
+      .insert([{ product_Id: pID }]);
+
+    if (error) {
+      if (error.code !== '23505') { // لو مش خطأ تكرار، يبقى فيه مشكلة بجد
+        setLoved(false);
+        setToatMessageBody("Error adding to wishlist 🌸");
+      }
+    } else {
+      setToatMessageBody("Added Successfully! 🤍");
+    }
+  } else {
+    // 2. المسح (اللي اتأكدنا إنه شغال)
+    const { error } = await supabase
+      .from('wishlist')
+      .delete()
+      .eq("product_Id", pID);
+
+    if (error) {
+      setLoved(true);
+      setToatMessageBody("Error removing from wishlist 🌸");
+    } else {
+      setToatMessageBody("Removed Successfully 💔");
+    }
   }
 }
   return (
     <>
       <div className="flex items-stretch px-5 md:px-12 lg:px-6 mt-10 mb-10 ">
+        {/*wishlist Message */}
+       { message&&
+        <div className="toast toast-end w-[40%]">
+                <div className="alert alert-info text-16 bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
+                    <span>{toastMessageBody}</span>
+                </div>
+            </div>
+        }
+
         {!loading && product ? (
           <div className="w-full flex flex-col md:flex-row justify-between  ">
             {/*product image  */}
-            <div className="w-[100%] md:w-[40%] h-96 flex justify-center items-center">
+            <div className=" relative w-[100%] md:w-[40%] h-96 flex justify-center items-center">
               <img
                 src={product.api_featured_image}
                 alt={product.name}
                 className="h-full w-auto object-contain"
               />
+              <button className="absolute top-4 right-4 hover:scale-110 ease-in-out duration-200 transition-all"
+              onClick={()=>{addToWishList(product.id )}}>
+                    <i className={` fa-heart font-bold text-[30px] md:text-[40px] cursor-pointer 
+                         dark:text-dark-secondary-800 text-light-secondary-400 
+                         hover:text-light-secondary-500 dark:hover:text-dark-secondary-700
+                         ${loved && isAuth?`fa-solid`:`fa-regular`}`}></i>
+              </button>
             </div>
             {/* product data*/}
             <div className="mt-8 w-[100%] md:w-[50%] flex flex-col gap-4 ">
@@ -112,8 +158,6 @@ export default function One_product() {
                       {product.category}
                     </p>
                   )}
-                  <i className="ml-auto fa-regular fa-heart text-24 md:text-[26px] cursor-pointer 
-                         dark:text-dark-secondary-800 text-light-secondary-400" onClick={()=>{addToWishList()}}></i>
                 </div>
                 {/*descripton */}
                 <p
@@ -198,38 +242,44 @@ export default function One_product() {
                     );
                   })()}
               </div>
-             {/*counter & addbutton  */}
-              <div className="flex justify-between">
-                {/*counter */}
-                <div className="flex text-[18px] text-light-neutral-50 bg-light-neutral-300 w-[30%] md:w-[30%] lg:w-[20%] rounded-full overflow-hidden ">
-                  <div className="flex-1 flex items-center justify-center border-r-[0.25px] dark:border-dark-neutral-800
-                   border-light-neutral-50 cursor-pointer hover:bg-light-secondary-600 dark:hover:bg-dark-secondary-700"
-                   onClick={()=>{decrementCount()}}>
-                    -
-                  </div>
-                  <div className="flex-1 border-r-[0.25px] flex items-center justify-center dark:border-dark-neutral-800 border-light-neutral-50">
-                    {count}
-                  </div>
-                  <div className="flex-1 flex items-center justify-center cursor-pointer
-                  hover:bg-light-secondary-600 dark:hover:bg-dark-secondary-700"
-                  onClick={()=>{incrementCount()}}>+</div>
+             {/*counter & addButton  */}
+              {product.stock !== 0 ?
+                <div className="flex justify-between">
+                    {/*counter */}
+                    <div className="flex text-[18px] text-light-neutral-50 bg-light-neutral-300 w-[30%] md:w-[30%] lg:w-[20%] rounded-full overflow-hidden ">
+                    <div className="flex-1 flex items-center justify-center border-r-[0.25px] dark:border-dark-neutral-800
+                    border-light-neutral-50 cursor-pointer hover:bg-light-secondary-600 dark:hover:bg-dark-secondary-700"
+                    onClick={()=>{decrementCount()}}>
+                        -
+                    </div>
+                    <div className="flex-1 border-r-[0.25px] flex items-center justify-center dark:border-dark-neutral-800 border-light-neutral-50">
+                        {count}
+                    </div>
+                    <div className="flex-1 flex items-center justify-center cursor-pointer
+                    hover:bg-light-secondary-600 dark:hover:bg-dark-secondary-700"
+                    onClick={()=>{incrementCount()}}>+</div>
+                    </div>
+                    {/*button add to cart */}
+                    <button
+                    className=" flex justify-center items-center rounded-full border-light-secondary-50
+                            dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
+                            dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[50%] py-2 
+                            hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
+                            text-light-primary-400 font-playfair text-[16px] md:text-20 font-bold
+                            disabled:cursor-not-allowed disabled:hover:bg-light-secondary-400 dark:disabled:hover:bg-dark-secondary-800
+                            dark:disabled:hover:border-dark-secondary-800"
+                    onClick={() => {
+                    add_to_cart(product.id);
+                    }}
+                >
+                    Add to <i className="fa-solid fa-cart-shopping"></i>
+                    </button>
                 </div>
-                {/*button add to cart */}
-                <button
-                className=" flex justify-center items-center rounded-full border-light-secondary-50
-                        dark:text-dark-primary-500  dark:bg-dark-secondary-800 dark:border-dark-secondary-800
-                        dark:hover:border-dark-secondary-700 bg-light-secondary-400 border-[2px] w-[50%] py-2 
-                          hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
-                        text-light-primary-400 font-playfair text-[16px] md:text-20 font-bold
-                        disabled:cursor-not-allowed disabled:hover:bg-light-secondary-400 dark:disabled:hover:bg-dark-secondary-800
-                        dark:disabled:hover:border-dark-secondary-800"
-                onClick={() => {
-                  add_to_cart(product.id);
-                }}
-              >
-                Add to <i className="fa-solid fa-cart-shopping"></i>
-                </button>
-              </div>
+                :
+                <div className="w-[100%] h-11 flex justify-center items-center bg-red-900 text-white text-16 md:text-20">
+                    OUT OF STOCK
+                </div>
+              }
             </div>
           </div>
         ) : (
