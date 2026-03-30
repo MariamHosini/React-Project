@@ -62,38 +62,48 @@ export default function One_product() {
     numberOfProduct: count
   }));
   }
-async function addToWishList(pID) {
-  if (!isAuth) return navigate("/login");
-
-  // 1. اعكسي شكل القلب فوراً (Optimistic UI) عشان البنت تحس بالسرعة
-  const isAdding = !loved; 
-  setLoved(isAdding);
-
-  if (isAdding) {
-    const { error } = await supabase
-      .from('wishlist')
+  async function addToWishList(pID){
+  if(!isAuth){
+    navigate("/login")
+  }
+  else{
+    const nextLovedState = !loved; 
+   setLoved(nextLovedState);
+    if(nextLovedState){
+        const { error } = await supabase
+      .from('wishlist') 
       .insert([{ product_Id: pID }]);
-
-    if (error) {
-      if (error.code !== '23505') { // لو مش خطأ تكرار، يبقى فيه مشكلة بجد
-        setLoved(false);
-        setToatMessageBody("Error adding to wishlist 🌸");
+      if(error){
+        console.log(error)
+        setLoved(false)
+        setMessage(true)
+        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
       }
-    } else {
-      setToatMessageBody("Added Successfully! 🤍");
+      else{
+        setMessage(true)
+        setToatMessageBody("Added Succesfully to your wishlist 🤍");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
     }
-  } else {
-    // 2. المسح (اللي اتأكدنا إنه شغال)
-    const { error } = await supabase
-      .from('wishlist')
-      .delete()
-      .eq("product_Id", pID);
-
-    if (error) {
-      setLoved(true);
-      setToatMessageBody("Error removing from wishlist 🌸");
-    } else {
-      setToatMessageBody("Removed Successfully 💔");
+    else{
+        const { error } = await supabase
+      .from('wishlist') 
+      .delete({ count: 'exact' })
+      .eq("product_Id" ,Number(pID) );
+      if(error){
+        console.log(error)
+        setLoved(true)
+        setMessage(true)
+        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
+      else{
+        console.log("Rows deleted:", count);
+        setMessage(true)
+        setToatMessageBody("Removed Succesfully from your wishlist.");
+        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
+      }
     }
   }
 }
