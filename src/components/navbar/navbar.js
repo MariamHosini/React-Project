@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../../store/themeSlice";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link ,useNavigate} from "react-router-dom";
 import logo from "../../assets/logo.webp";
 import { setLogout } from "../../store/authSlice";
 import { useState } from "react";
 export default function Navbar() {
+  const navigate = useNavigate();
   const numberOfProducts = useSelector(store=>store.cart.productNumbers);
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
@@ -169,6 +170,7 @@ export default function Navbar() {
             hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
             p-6 md:p-5 text-center  transition-colors duration-200 relative
             "
+            onClick={()=>{navigate("/cart")}}
           >
             <p className="text-light-primary-400 dark:text-dark-primary-500 absolute text-[19px] font-semibold
             -top-3 -right-0">{numberOfProducts}</p>

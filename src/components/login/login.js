@@ -28,25 +28,37 @@ export default function Login() {
           if (authError.message === "Invalid login credentials") {
             setErrorMessage("Incorrect email or password. Please try again.");
           } else if (authError.message === "Email not confirmed") {
-            setErrorMessage("Please verify your email address first to log in.");
+            setErrorMessage("Please verify your email address first to login.");
           } else {
             setErrorMessage(authError.message);
           }
           return;
         }
         if (userData?.user) {
-          const { data: profileData } = await supabase
-            .from("users")
-            .select("name")
-            .eq('id', userData.user.id)
-            .single();
+          const [profileResponse, wishlistResponse] = await Promise.all([
+            supabase
+                .from("users")
+                .select("name")
+                .eq('id', userData.user.id)
+                .single(),
+            supabase
+                .from("wishlist")
+                .select("product_Id") 
+                .eq('userId', userData.user.id)
+          ]);
+
+          const { data: profileData } = profileResponse;
+          const { data: wishlistData } = wishlistResponse;
           const nameToShow = profileData?.name || userData.user.email;
-          dispatch(setLogin({ ...userData.user, userName: nameToShow }));
+          const favoriteIds = wishlistData ? wishlistData.map(item => item.product_Id) : [];
+          dispatch(setLogin({
+            user:{ ...userData.user, userName: nameToShow },
+            wishList:favoriteIds
+          }));
           reset();
           navigate(-1);
         }
       } catch (err) {
-        console.error(err);
         setErrorMessage("Something went wrong. Please try again.");
       } finally {
         dispatch(stopSpinner());

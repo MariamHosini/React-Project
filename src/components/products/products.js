@@ -14,11 +14,14 @@ import lipstick from '../../assets/lipstick.png'
 import mascara from '../../assets/mascara.png'
 import nailPolish from '../../assets/nail-polish.png'
 import {products} from '../../data/mock_data.js'
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
 import supabase from '../../supabaseClient'
+import {addToWishlistRedux,removeFromWishlistRedux} from '../../store/authSlice'
 export default function Products() {
   const isAuth = useSelector(store=>store.auth.isAuthenticated)
+  const userWishList = useSelector(store=>store.auth.wishList)
   const navigate =useNavigate();
+  const dispatch =useDispatch();
   const [searchParams , setSearchParams]= useSearchParams();
   const [brands, setBrands] = useState(); 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -26,7 +29,6 @@ export default function Products() {
   const [ClassifiedProducts, setClassifiedProducts] = useState([]);
   const [isLoading,setIsLoading] = useState(false);
   const [error , setError] = useState(false);
-    const[loved , setLoved] = useState(false);
     const [toastMessageBody , setToatMessageBody] = useState("");
     const [message , setMessage] = useState(false);
   const categories =[
@@ -210,43 +212,42 @@ function go_to_product(id){
   const new_id=btoa(id);
   navigate(`/one-product/${new_id}`);
 }
-  async function addToWishList(pID){
+  async function toggleWishList(pID){
   if(!isAuth){
     navigate("/login")
   }
   else{
-    const nextLovedState = !loved; 
-   setLoved(nextLovedState);
-    if(nextLovedState){
-        const { error } = await supabase
+    const currentlyLoved = userWishList.includes(pID);
+    if(!currentlyLoved){
+      const { error } = await supabase
       .from('wishlist') 
       .insert([{ product_Id: pID }]);
       if(error){
-        setLoved(false)
         setMessage(true)
         setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
         setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
       }
       else{
         setMessage(true)
-        setToatMessageBody("Added Succesfully to your wishlist 🤍");
+         dispatch(addToWishlistRedux(pID))
+        setToatMessageBody("Added to your wishlist 🤍");
         setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
       }
     }
     else{
-        const { error } = await supabase
+      const { error } = await supabase
       .from('wishlist') 
       .delete()
       .eq("product_Id" ,pID );
       if(error){
-        setLoved(true)
         setMessage(true)
         setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
         setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
       }
       else{
         setMessage(true)
-        setToatMessageBody("Removed Succesfully from your wishlist.");
+        dispatch(removeFromWishlistRedux(pID))
+        setToatMessageBody("Removed from your wishlist 🌸");
         setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
       }
     }
@@ -392,7 +393,7 @@ function go_to_product(id){
                         </button>
                         <i className={` fa-heart text-24 md:text-[26px] cursor-pointer 
                           dark:text-dark-secondary-800 text-light-secondary-400
-                          ${loved && isAuth?`fa-solid`:`fa-regular`}`} onClick={()=>{addToWishList(product.id)}}></i>
+                          ${userWishList.includes(product.id) && isAuth?`fa-solid`:`fa-regular`}`} onClick={()=>{toggleWishList(product.id)}}></i>
                         </div>
                       </div>
                     </div>

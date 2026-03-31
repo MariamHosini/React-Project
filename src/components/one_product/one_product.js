@@ -5,10 +5,10 @@ import { products } from "../../data/mock_data";
 import {useDispatch , useSelector} from 'react-redux'
 import { addProduct } from "../../store/cartSlice";
 import supabase from '../../supabaseClient'
+import {addToWishlistRedux,removeFromWishlistRedux} from '../../store/authSlice'
 export default function One_product() {
   const dispatch = useDispatch();
   const navigate =useNavigate();
-  const isAuth = useSelector(store=>store.auth.isAuthenticated)
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(false);
@@ -17,6 +17,8 @@ export default function One_product() {
   const[loved , setLoved] = useState(false);
   const [toastMessageBody , setToatMessageBody] = useState("");
   const [message , setMessage] = useState(false);
+  const isAuth = useSelector(store=>store.auth.isAuthenticated);
+  const userWishList = useSelector(store=>store.auth.wishList);
   function incrementCount(){
     setCount(prev=>{
         if(prev<product.stock){return prev+1}
@@ -30,11 +32,14 @@ export default function One_product() {
     })
   }
   useEffect(() => {
-    if(!isAuth){
-        setLoved(false);
-    }
     if (id && id != null) {
       const new_id = atob(id);
+      if(!isAuth  && new_id){
+            setLoved(false);
+        }
+        else{
+            if(userWishList.includes(Number(new_id))){setLoved(true)}
+        }
       (async () => {
         setLoading(true);
         const data = await new Promise((resolve) => {
@@ -58,52 +63,41 @@ export default function One_product() {
   function add_to_cart(pID) {
     dispatch(addProduct({
     id: pID, 
-    color: selectedColor, 
+    selectedColor: selectedColor, 
     numberOfProduct: count
   }));
+  setMessage(true);
+  setToatMessageBody("Added to your cart 🤍");
+        setTimeout(()=>{
+             setMessage(false);
+        setToatMessageBody("");
+        },2000)
   }
-  async function addToWishList(pID){
-  if(!isAuth){
-    navigate("/login")
-  }
-  else{
-    const nextLovedState = !loved; 
-   setLoved(nextLovedState);
-    if(nextLovedState){
-        const { error } = await supabase
-      .from('wishlist') 
-      .insert([{ product_Id: pID }]);
-      if(error){
-        console.log(error)
-        setLoved(false)
-        setMessage(true)
-        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
-        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
-      }
-      else{
-        setMessage(true)
-        setToatMessageBody("Added Succesfully to your wishlist 🤍");
-        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
-      }
+async function toggleWishlist(pID) {
+  if (!isAuth) return navigate("/login");
+
+  if (!loved) {
+    const { error } = await supabase.from('wishlist').insert([{ product_Id: pID }]);
+    if (!error) { 
+        setLoved(true);
+        setMessage(true);
+        dispatch(addToWishlistRedux(pID))
+        setToatMessageBody("Added to your wishlist 🤍");
+        setTimeout(()=>{
+             setMessage(false);
+        setToatMessageBody("");
+        },2000)
     }
-    else{
-        const { error } = await supabase
-      .from('wishlist') 
-      .delete({ count: 'exact' })
-      .eq("product_Id" ,Number(pID) );
-      if(error){
-        console.log(error)
-        setLoved(true)
-        setMessage(true)
-        setToatMessageBody("Oops! Something went wrong while saving your favorite. Please try again in a moment!");
-        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
-      }
-      else{
-        console.log("Rows deleted:", count);
-        setMessage(true)
-        setToatMessageBody("Removed Succesfully from your wishlist.");
-        setTimeout(()=>{setMessage(false);setToatMessageBody("")},2000)
-      }
+  } else {
+    const { error } = await supabase.from('wishlist').delete().eq("product_Id", pID);
+     if (!error) { setLoved(false);
+        setMessage(true);
+        dispatch(removeFromWishlistRedux(pID))
+        setToatMessageBody("Removed from your wishlist 🌸");
+        setTimeout(()=>{
+             setMessage(false);
+        setToatMessageBody("");
+        },2000)
     }
   }
 }
@@ -112,8 +106,8 @@ export default function One_product() {
       <div className="flex items-stretch px-5 md:px-12 lg:px-6 mt-10 mb-10 ">
         {/*wishlist Message */}
        { message&&
-        <div className="toast toast-end w-[40%]">
-                <div className="alert alert-info text-16 bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
+        <div className="z-10 toast toast-end w-[40%] text-center">
+                <div className=" alert alert-info text-center flex items-center justify-center text-14  md:text-[18px] bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
                     <span>{toastMessageBody}</span>
                 </div>
             </div>
@@ -129,7 +123,7 @@ export default function One_product() {
                 className="h-full w-auto object-contain"
               />
               <button className="absolute top-4 right-4 hover:scale-110 ease-in-out duration-200 transition-all"
-              onClick={()=>{addToWishList(product.id )}}>
+              onClick={()=>{toggleWishlist(product.id )}}>
                     <i className={` fa-heart font-bold text-[30px] md:text-[40px] cursor-pointer 
                          dark:text-dark-secondary-800 text-light-secondary-400 
                          hover:text-light-secondary-500 dark:hover:text-dark-secondary-700
@@ -231,7 +225,7 @@ export default function One_product() {
                                     className={`cursor-pointer h-10 w-10 rounded-full transition-all duration-300 shadow-md border-2 
                                     ${
                                       selectedColor?.color === item.colour_name
-                                        ? "scale-125 border-light-primary-200 dark:border-dark-secondary-500 z-10"
+                                        ? "scale-125 border-light-primary-200 dark:border-dark-secondary-500 "
                                         : "border-white hover:scale-110"
                                     }`}
                                     style={{ backgroundColor: item.hex_value }}

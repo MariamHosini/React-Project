@@ -12,8 +12,9 @@ const cartSlice = createSlice({
       state.productNumbers = state.productData.length;
     } ,
     removeProduct:(state,action)=>{
-        const { id, selectedColor } = action.payload;
-       state.productData = state.productData.filter(item=>!(item.id === id && item.selectedColor === selectedColor));
+        const { id, selectedColor,numberOfProduct } = action.payload;
+       state.productData = state.productData
+       .filter(item=>!(item.id === id && item.selectedColor?.hex_value === selectedColor?.hex_value&&item.numberOfProduct===numberOfProduct));
        state.productNumbers = state.productData.length;
     },
     clearCart: (state) => {
