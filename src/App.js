@@ -18,6 +18,7 @@ import ForgetPassword from './components/forgetPassword/forgetPassword'
 import ResetPassword from './components/resetPassword/resetPassword';
 import OneProduct from './components/one_product/one_product'
 import Cart from './components/cart/cart'
+import CheckOut from './components/check-out/checkOut';
 function App() {
   const location = useLocation();
   const noNavbar = ['/login' , '/sign-up' , '/forget-password' , '/reset-password']
@@ -38,6 +39,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/blogPost/:id" element={<BlogPost />} />
           <Route path="/one-product/:id" element={<OneProduct />} />
+          <Route path="/check-out" element={<CheckOut />} />
           <Route path="/login" element={!isAuthenticated ?<Login /> : <Navigate to="/"/>} />
           <Route path="/sign-up" element={!isAuthenticated ?<SignUp /> : <Navigate to="/"/>} />
           <Route path="/profile/:userId" element={<Profile />} />

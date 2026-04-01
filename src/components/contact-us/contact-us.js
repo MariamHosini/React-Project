@@ -14,7 +14,7 @@ export default function ContactUs() {
     handleSubmit,
     reset,
     formState: { errors, isValid, isDirty },
-  } = useForm({ mode: onchange });
+  } = useForm({ mode: "onChange" });
   function submit() {
     dispatch(startSpinner());
     setTimeout(() => {
