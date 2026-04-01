@@ -1,6 +1,6 @@
 import React from 'react'
 import {useSelector , useDispatch} from 'react-redux'
-import {removeProduct , clearCart} from '../../store/cartSlice'
+import {removeProduct , clearCart,updateQuantity} from '../../store/cartSlice'
 import { useEffect , useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {products} from '../../data/mock_data'
@@ -13,6 +13,7 @@ export default function Cart() {
     const [totalPrice , setTotalPrice] = useState(0); 
     const [subTotalPrice , setSubTotalPrice] = useState(0); 
     const[shippingPrice , setShippingPrice] = useState(0);
+    const[shippingFree , setShippingFree] = useState(false);
     useEffect(()=>{
         if(products && products!=null){
             const finalProducts = products_data.map(item => {
@@ -24,16 +25,26 @@ export default function Cart() {
                 };
             })
            setFinalProducts(finalProducts)
-           console.log(finalProducts)
            const prices = finalProducts.reduce((accumilator,product)=>{return accumilator + (Number(product.numberOfProduct) * Number(product.price))},0)
-           console.log(prices)
-           const subprice = prices * 50;
-           const shipping = (subprice * 0.07).toFixed(0);
-            const finalPrice = subprice + Number(shipping);
+           const subprice = (prices * 50).toFixed(0);
+           let shipping = 0;
+          let finalPrice = 0;
+           if(subprice >= 10000){
+            setShippingFree(true)
+            shipping=0;
+            finalPrice = Number(subprice) + Number(shipping);
            setShippingPrice(shipping)
            setSubTotalPrice(subprice)
            setTotalPrice(finalPrice)
-        
+           }
+           else{
+            setShippingFree(false)
+            shipping = (subprice * 0.1).toFixed(0);
+           finalPrice = Number(subprice) + Number(shipping);
+           setShippingPrice(shipping)
+           setSubTotalPrice(subprice)
+           setTotalPrice(finalPrice)
+           }
         }
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,17 +52,29 @@ export default function Cart() {
     function remove_product(product){
         dispatch(removeProduct(product))
     }
+    function incrementCount(id, numberOfProduct , stock , selectedColor){
+        const newQuantity = Number(numberOfProduct) + 1;
+        if((newQuantity) <= stock){
+            dispatch(updateQuantity({ id, numberOfProduct: newQuantity, selectedColor }));
+        }
+     }
+    function decrementCount(id, numberOfProduct, selectedColor){
+        const newQuantity = Number(numberOfProduct) - 1;
+        if(newQuantity >= 1){
+            dispatch(updateQuantity({ id, numberOfProduct: newQuantity, selectedColor }));
+        }
+    }
   return (
     <>
     <div className="container mx-auto px-4 py-10 mt-8">
         {finalProducts.length>0?
-            <>
+            < >
                 <div className='flex flex-col lg:flex-row justify-between w-[100%] lg:w-[65%] items-center'>
                 <h1 className="font-playfair text-3xl md:text-4xl font-bold mb-10 text-light-secondary-700 dark:text-dark-secondary-500">
                     Your Beauty Bag
                 </h1>
                 <p className='font-playfair text-2xl  mb-5 md:mb-10 text-light-secondary-500 dark:text-dark-secondary-300'>
-                    ({products_Number} products)
+                    ({products_Number} {products_Number > 1 ? 'items' : 'item'})
                 </p>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-10">
@@ -60,21 +83,37 @@ export default function Cart() {
                         {
                             finalProducts?.map((product,index)=>{
                                 return(
-                                    <>
-                                    <div key={`${product.id}-${index}`} className="flex gap-3 py-5 border-b border-light-secondary-100 items-center">
+                                    <React.Fragment key={`${product.id}-${index}`} >
+                                    <div  className="flex gap-2 md:gap-3 py-5 border-b border-light-secondary-100 items-center">
                                         <img src= {product.api_featured_image}  alt={product.name}
-                                        className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-xl bg-light-secondary-50" />
+                                        className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-xl bg-light-secondary-50
+                                        cursor-pointer"  onClick={()=>{navigate(`/one-product/${btoa(product.id)}`)}}/>
                                         <div className="flex-1 space-y-1">
                                         <h3 className="font-playfair font-bold text-light-secondary-500 
-                                        dark:text-light-secondary-300 text-lg md:text-xl first-letter:uppercase">{product.brand}</h3>
-                                        <p className="text-light-secondary-700 
-                                        dark:text-light-secondary-400 text-md md:text-lg first-letter:uppercase">{product.product_type}</p>
+                                        dark:text-light-secondary-300 text-lg md:text-xl first-letter:uppercase">{product.brand} </h3>
+                                        <div className="flex flex-col justify-center gap-2">
+                                            <p className="text-light-secondary-700 
+                                             dark:text-light-secondary-400 text-md md:text-lg first-letter:uppercase">
+                                            {product.product_type}</p>
+                                            <div className='flex items-center gap-1 md:gap-2 '>
+                                               {  product.selectedColor?.hex_value && product.selectedColor?.color &&
+                                                ( <>
+                                                <div className='w-4 h-4  md:w-5 md:h-5 rounded-full' style={{backgroundColor:product.selectedColor.hex_value}}></div>
+                                                <p className="text-light-secondary-700 
+                                             dark:text-light-secondary-400 text-xs md:text-lg first-letter:uppercase">{product.selectedColor.color}</p>
+                                                </>)
+
+                                               }
+                                            </div>
+                                        </div>
                                         <div className="flex items-center gap-2 mt-2">
                                             <button className="w-8 h-8 rounded-full border-2 border-light-secondary-500 text-lg md:text-xl
-                                            text-light-neutral-800 dark:text-dark-neutral-50 dark:border-dark-secondary-700">-</button>
+                                            text-light-neutral-800 dark:text-dark-neutral-50 dark:border-dark-secondary-700"
+                                            onClick={()=>{decrementCount(product.id,product.numberOfProduct, product.selectedColor)}}>-</button>
                                             <span className="font-semibold text-light-neutral-700 dark:text-light-neutral-100">{product.numberOfProduct}</span>
                                             <button className="w-8 h-8 rounded-full border-2 border-light-secondary-500 text-lg md:text-xl
-                                            text-light-neutral-800 dark:text-dark-neutral-50 dark:border-dark-secondary-700 text-center">+</button>
+                                            text-light-neutral-800 dark:text-dark-neutral-50 dark:border-dark-secondary-700 text-center"
+                                            onClick={()=>{incrementCount(product.id,product.numberOfProduct , product.stock , product.selectedColor)}}>+</button>
                                         </div>
                                         </div>
                                         
@@ -83,14 +122,34 @@ export default function Cart() {
                                         <button className="text-red-400 text-sm mt-2 hover:underline" onClick={()=>{remove_product(product)}}>Remove</button>
                                         </div>
                                     </div>
-                                    </>
+                                    </React.Fragment>
                                 )
                             })
                         }
                     </div>
 
-                    <div className="lg:w-1/3">
-                    <div className="bg-light-secondary-50 dark:bg-light-secondary-500 p-6 rounded-3xl sticky top-28 border
+                    <div className="lg:w-1/3 sticky top-10 self-start">
+                    <div className="mb-6 p-4 bg-transparent dark:bg-dark-secondary-900 rounded-2xl border border-dashed border-light-secondary-300 text-center">
+                        {shippingFree ? (
+                            <p className="text-green-600 font-bold flex items-center justify-center gap-2">
+                                <i className="fa-solid fa-truck-fast"></i>
+                                Congratulations! You've unlocked Free Shipping! 🥳
+                            </p>
+                        ) : (
+                            <p className="text-light-secondary-700 dark:text-dark-secondary-300">
+                                Add <span className="font-bold text-light-secondary-500">{(10000 - subTotalPrice).toFixed(0)} EGP</span> more to get 
+                                <span className="font-bold"> FREE SHIPPING!</span>
+                            </p>
+                        )}
+    
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-3 overflow-hidden">
+                            <div 
+                                className="bg-light-secondary-400 dark:bg-dark-secondary-700 h-full transition-all duration-500" 
+                                style={{ width: `${Math.min((subTotalPrice / 10000) * 100, 100)}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    <div className="bg-light-secondary-50 dark:bg-light-secondary-500 p-6 rounded-3xl border
                     border-light-secondary-100 dark:border-light-secondary-500">
                         <h2 className="font-playfair text-2xl font-bold text-light-primary-700 dark:text-light-primary-800 mb-6">Summary</h2>
                         <div className="space-y-4 font-opensans">
@@ -100,7 +159,7 @@ export default function Cart() {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-light-primary-700 dark:text-light-primary-800">Estimated Shipping</span>
-                            <span className="text-green-800 font-bold">{shippingPrice}</span>
+                            <span className="text-green-800 font-bold">{!shippingFree?shippingPrice: 'Free'}</span>
                         </div>
                         <hr className="border-light-secondary-200" />
                         <div className="flex justify-between text-xl font-bold">
@@ -120,13 +179,13 @@ export default function Cart() {
                     </div>
                 </div>
                 <div className="flex justify-start mt-4">
-                <button 
-                        onClick={() => dispatch(clearCart())}
-                        className="flex items-center gap-2 text-red-400 hover:text-red-500 transition-colors text-sm font-medium px-2 py-1"
-                    >
-                        <i className="fa-regular fa-trash-can"></i>
-                        Clear Shopping Bag
-                    </button>
+                            <button 
+                                    onClick={() => dispatch(clearCart())}
+                                    className="flex items-center gap-2 text-red-400 hover:text-red-500 transition-colors text-sm font-medium px-2 py-1"
+                                     >
+                                    <i className="fa-regular fa-trash-can"></i>
+                                    Clear Shopping Bag
+                             </button>
                 </div>
             </>
         :
