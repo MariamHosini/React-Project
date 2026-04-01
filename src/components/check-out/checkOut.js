@@ -109,7 +109,7 @@ export default function CheckOut() {
           <div className="flex flex-col w-[100%] lg:grid lg:grid-cols-3 px-4 lg:px-0 gap-10 ">
             {/*left side */}
             <div
-              className="order-2 lg:order-1 w-[100%] lg:col-span-2 lg:rounded-3xl lg:border-[3px] lg:border-gray-100
+              className="order-1  w-[100%] lg:col-span-2 lg:rounded-3xl lg:border-[3px] lg:border-gray-100
                         dark:lg:border-2 dark:lg:border-dark-neutral-400 p-0 lg:p-10"
             >
               <h1
@@ -413,7 +413,7 @@ export default function CheckOut() {
             </div>
 
             {/*right side */}
-            <div className="lg:sticky lg:top-10 order-1 lg:order-2  lg:col-span-1 flex flex-col gap-3 ">
+            <div className="lg:sticky lg:top-10 order-3 lg:order-2  lg:col-span-1 flex flex-col gap-3 ">
               <div className="collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2 dark:border-dark-neutral-400 mb-2">
                 <input type="checkbox" className="peer" />
                 <div className="collapse-title flex flex-col w-[100%] ">
@@ -549,7 +549,7 @@ export default function CheckOut() {
             </div>
             {/* Payment Method Section */}
             <div
-              className="col-span-2 order-3  border rounded-3xl lg:border-[3px] border-gray-100
+              className="col-span-2 order-2 lg:order-3  border rounded-3xl lg:border-[3px] border-gray-100
                         dark:lg:border-2 dark:border-dark-neutral-400  lg:p-8 shadow-sm"
             >
               <div className="flex flex-col gap-4">
