@@ -548,15 +548,15 @@ export default function CheckOut() {
             </div>
             {/* Payment Method Section */}
             <div
-              className="col-span-2 order-3  border lg:rounded-3xl lg:border-[3px] lg:border-gray-100
-                        dark:lg:border-2 dark:lg:border-dark-neutral-400 p-8 shadow-sm"
+              className="col-span-2 order-3  border rounded-3xl lg:border-[3px] border-gray-100
+                        dark:lg:border-2 dark:border-dark-neutral-400  lg:p-8 shadow-sm"
             >
               <div className="flex flex-col gap-4">
                 {/* Credit Card Option */}
-                <div className={`p-6 `}>
+                <div className={`p-4 `}>
                   <label className="flex items-center justify-between mb-6 cursor-pointer">
                     <div className="flex items-center gap-3">
-                      <span className="font-bold text-[#4A314D]">
+                      <span className="font-bold text-light-secondary-800 dark:text-dark-secondary-300">
                         Pay with Credit Card
                       </span>
                     </div>
