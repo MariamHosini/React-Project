@@ -129,7 +129,8 @@ export default function Cart() {
                         </div>
 
                         <div className="lg:w-1/3 sticky top-10 md:self-start">
-                        <div className="mb-6 p-4 bg-transparent dark:bg-dark-secondary-900 rounded-2xl border border-dashed border-light-secondary-300 text-center">
+                        <div className="mb-6 p-4 bg-transparent w-full h-24
+                         dark:bg-dark-secondary-900 rounded-2xl border border-dashed border-light-secondary-300 text-center">
                             {shippingFree ? (
                                 <p className="text-green-600 font-bold flex items-center justify-center gap-2">
                                     <i className="fa-solid fa-truck-fast"></i>

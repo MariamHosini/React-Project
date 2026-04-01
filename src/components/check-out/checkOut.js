@@ -64,6 +64,7 @@ export default function CheckOut() {
     formState: { errors, isValid, isDirty },
   } = useForm({ mode: "onChange" });
   function submit(data) {
+    setFinalProducts([])
     dispatch(startSpinner());
     setTimeout(() => {
       reset(
