@@ -493,7 +493,7 @@ export default function CheckOut() {
             </div>
             {/*Billing summary side */}
             <div className="lg:sticky lg:top-10 order-3 lg:order-2  lg:col-span-1 flex flex-col gap-3 ">
-              <div className="collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2
+              <div className="hidden lg:collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2
                dark:border-dark-neutral-400 mb-2">
                 <input type="checkbox" className="peer" />
                 <div className="collapse-title flex flex-col w-[100%] ">
@@ -661,10 +661,15 @@ export default function CheckOut() {
                           <input
                             id="billing-form"
                             {...register("cardNumber", {
-                              onChange: (e) => {
-                                const value = e.target.value.replace(/\D/g, "");
-                                e.target.value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
-                                }
+                              required: "Card number is required", 
+                            onChange: (e) => {
+                              const value = e.target.value.replace(/\D/g, "");   
+                              e.target.value = value.replace(/(\d{4})(?=\d)/g, "$1 ").slice(0, 19);  
+                            },
+                            pattern: {
+                              value: /^(\d{4}\s?){4}$/,
+                              message: "Card number must be 16 digits"
+                            }
                             })}
                             type="text"
                             placeholder="0000 0000 0000 0000"
