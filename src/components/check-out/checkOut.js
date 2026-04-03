@@ -8,6 +8,7 @@ import Spinner from "../spinner/spinner";
 import { startSpinner, stopSpinner } from "../../store/spinnerSlice";
 import { clearCart } from "../../store/cartSlice";
 import  supabase  from '../../supabaseClient';
+import {addOrder} from '../../store/authSlice';
 export default function CheckOut() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState(false);
@@ -87,6 +88,7 @@ export default function CheckOut() {
           setLoadingMessage(false);
         }, 3000);
     } else {
+      dispatch(addOrder(finalOrder));
         setLoadingMessage(true);
         setTotalPrice(0);
         setSubTotalPrice(0);

@@ -37,7 +37,12 @@ const authSlice = createSlice({
         },
         clearWishlist(state) {
             state.wishList = [];
-            state.number_of_items_in_wishlist = 0;  }
+            state.number_of_items_in_wishlist = 0;
+        },
+        addOrder(state, action) {
+            state.orders.push(action.payload);
+            state.number_of_orders = state.orders.length;
+        }
     }
 });
 
