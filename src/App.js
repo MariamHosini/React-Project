@@ -19,6 +19,7 @@ import ResetPassword from './components/resetPassword/resetPassword';
 import OneProduct from './components/one_product/one_product'
 import Cart from './components/cart/cart'
 import CheckOut from './components/check-out/checkOut';
+import WishList from './components/wishList/wishList';
 function App() {
   const location = useLocation();
   const noNavbar = ['/login' , '/sign-up' , '/forget-password' , '/reset-password']
@@ -37,12 +38,13 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={isAuthenticated ?<WishList /> : <Navigate to="/"/>}  />
           <Route path="/blogPost/:id" element={<BlogPost />} />
           <Route path="/one-product/:id" element={<OneProduct />} />
           <Route path="/check-out" element={<CheckOut />} />
           <Route path="/login" element={!isAuthenticated ?<Login /> : <Navigate to="/"/>} />
           <Route path="/sign-up" element={!isAuthenticated ?<SignUp /> : <Navigate to="/"/>} />
-          <Route path="/profile/:userId" element={<Profile />} />
+          <Route path="/profile/:userId" element={isAuthenticated ? <Profile /> : <Navigate to="/"/>} />
           <Route path="/forget-password" element={!isAuthenticated?<ForgetPassword />:<Navigate to="/"/>} />
           <Route path="/reset-password" element={!isAuthenticated?<ResetPassword />:<Navigate to="/"/>} />
           <Route path="*" element={<Navigate to="/"/>} />

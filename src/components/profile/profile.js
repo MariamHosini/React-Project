@@ -1,20 +1,20 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
 export default function Profile() {
   const user = useSelector((state) => state.auth.user);
-
+  const orders = useSelector((state) => state.auth.orders);
+  console.log(orders)
+  const numberOfOrders = useSelector((state) => state.auth.number_of_orders);
+  const numberOfWishlistitems = useSelector((state) => state.auth.number_of_items_in_wishlist);
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 animate-fadeIn">
       {/* 1. Header Section (Cover + Photo) */}
       <div className="relative mb-24">
-        {/* Cover Image Placeholder */}
-        <div className="h-48 md:h-64 bg-gradient-to-r from-pink-100 to-rose-200 dark:from-dark-secondary-900 dark:to-neutral-900 rounded-3xl shadow-sm"></div>
         
         {/* Profile Info Overlay */}
-        <div className="absolute -bottom-16 left-8 flex items-end gap-6">
-          <div className="w-32 h-32 md:w-40 md:h-40 bg-white dark:bg-dark-neutral-800 p-2 rounded-full shadow-xl">
-            <div className="w-full h-full bg-pink-500 rounded-full flex items-center justify-center text-white text-5xl font-serif font-bold border-4 border-pink-100 dark:border-dark-neutral-700">
+        <div className=" flex items-end gap-6">
+          <div className="w-32 h-32 md:w-40 md:h-40  dark:bg-dark-neutral-800 p-2 rounded-full shadow-xl">
+            <div className="w-full h-full bg-pink-200  rounded-full flex items-center justify-center text-light-primary-600 text-5xl font-serif font-bold">
               {user?.userName?.charAt(0).toUpperCase()}
             </div>
           </div>
@@ -56,11 +56,10 @@ export default function Profile() {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2  gap-4">
             {[
-              { label: "My Orders", value: "05", icon: "📦" },
-              { label: "Wishlist", value: "12", icon: "❤️" },
-              { label: "Reviews", value: "03", icon: "✨" },
+              { label: "My Orders", value: numberOfOrders, icon: "📦" },
+              { label: "Wishlist", value: numberOfWishlistitems, icon: "💖" },
             ].map((stat, idx) => (
               <div key={idx} className="bg-white dark:bg-dark-neutral-800 p-6 rounded-3xl text-center border border-neutral-50 dark:border-white/5 hover:shadow-md transition-shadow">
                 <span className="text-2xl mb-2 block">{stat.icon}</span>
@@ -71,18 +70,62 @@ export default function Profile() {
           </div>
 
           {/* Recent Activity / Order History Placeholder */}
-          <div className="bg-white dark:bg-dark-neutral-800 p-8 rounded-3xl shadow-sm border border-neutral-100 dark:border-white/5">
-            <h3 className="text-lg font-bold mb-6 dark:text-white">Recent Beauty Picks</h3>
-            <div className="flex flex-col items-center py-12 text-center">
-              <div className="w-20 h-20 bg-neutral-50 dark:bg-dark-neutral-900 rounded-full mb-4 flex items-center justify-center">
-                <i className="fa-solid fa-bag-shopping text-neutral-300 text-2xl"></i>
-              </div>
-              <p className="text-neutral-500 max-w-xs">Your shopping bag is waiting for its first FemmeFlair treasure.</p>
-              <button className="mt-6 text-pink-500 font-bold underline decoration-2 underline-offset-4">
-                Start Shopping
-              </button>
+          <div className="border border-neutral-100 dark:border-white/5 rounded-2xl p-6">
+          <h3 className="text-xl font-serif font-bold text-light-secondary-700 dark:text-dark-secondary-300 mb-6">
+            Recent Orders
+          </h3>
+          {numberOfOrders === 0 ? (
+            <div className="text-center py-10">
+              <p className="dark:text-dark-secondary-700 text-light-secondary-500  text-20 italic">You haven't placed any orders yet.</p>
             </div>
-          </div>
+          ) : (
+                <div className="space-y-2">
+                {orders.map((order) => (
+                  <div 
+                    key={order.id} 
+                    className="collapse collapse-arrow   border-[3px] border-light-secondary-700  rounded-xl"
+                  >
+                    <input type="checkbox" className="peer" /> 
+                    <div className="collapse-title text-md font-medium flex justify-between  pt-10 pr-2">
+                      <div className="flex flex-col gap-4">
+                        <span className=" text-light-secondary-800 dark:text-dark-secondary-700 font-bold">Order #{(Math.random()*1000).toFixed(0)}</span>
+                        <span className="text-light-secondary-600 font-bold">{order.order_price} EGP</span>
+                      </div>
+                      <div className="text-md badge badge-outline border-dark-secondary-500
+                       text-dark-secondary-500 uppercase tracking-tighter mt-1">
+                        {order.status || 'Processing'}
+                      </div>
+                    </div>
+                    <div className="collapse-content p-1 md:p-5 "> 
+                      <div className=" ">
+                        <h4 className="text-[12px] uppercase mb-2 text-light-neutral-500 tracking-widest font-bold">Ordered Items</h4>
+                        
+                        {order.order_items.map((item, idx) => {
+                          return (
+                            <div key={idx} className="flex items-center gap-4 mb-5">
+                              <img src={item.api_featured_image} alt={item.product_name} className="w-20 h-20 rounded-lg object-cover" />
+                              <div>
+                                <p className="text-md font-medium text-light-secondary-700 dark:text-dark-secondary-300
+                                first-letter:uppercase">{item.brand} - {item.product_type}</p>
+                                <p className="text-sm text-light-secondary-500 dark:text-dark-secondary-400">
+                                  {item.numberOfProduct} x {(item.price*50).toFixed(0)} EGP</p>
+                                  {item.selectedColor && 
+                                    <div className="flex items-center gap-1 md:gap-2 mt-1">
+                                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.selectedColor.hex_value}}></div>
+                                     <span className="text-sm text-light-secondary-500 dark:text-dark-secondary-400">{item.selectedColor.color}</span>
+                                    </div>
+                                  }
+                              </div>
+
+                            </div>);})}
+                        
+                      </div>  
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+</div>
         </div>
 
       </div>

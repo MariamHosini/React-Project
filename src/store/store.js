@@ -9,7 +9,7 @@ import cartReducer from './cartSlice';
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['user', 'isAuthenticated',"wishList"] 
+  whitelist: ['user', 'isAuthenticated',"wishList",'number_of_items_in_wishlist',"orders",'number_of_orders'] 
 };
 const cartPersistConfig = {
   key: 'cart',

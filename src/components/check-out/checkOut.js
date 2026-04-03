@@ -7,6 +7,7 @@ import { products } from "../../data/mock_data";
 import Spinner from "../spinner/spinner";
 import { startSpinner, stopSpinner } from "../../store/spinnerSlice";
 import { clearCart } from "../../store/cartSlice";
+import  supabase  from '../../supabaseClient';
 export default function CheckOut() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState(false);
@@ -18,6 +19,8 @@ export default function CheckOut() {
   const loadding = useSelector((store) => store.spinner.mode);
   const products_data = useSelector((store) => store.cart.productData);
   const numberOfProducts = useSelector((store) => store.cart.productNumbers);
+  const [loadingMessage, setLoadingMessage] = useState(false);
+  const user = useSelector((store) => store.auth.user);
   useEffect(() => {
     if (products_data && products_data != null) {
       const finalProducts = products_data.map((item) => {
@@ -63,36 +66,43 @@ export default function CheckOut() {
     reset,
     formState: { errors, isValid, isDirty },
   } = useForm({ mode: "onChange" });
-  function submit(data) {
-    setFinalProducts([])
+  async function submit(data) {
     dispatch(startSpinner());
-    setTimeout(() => {
-      reset(
-        {
-            firstName: "",
-            lastName: "",
-            email: "",
-            streetAddress: "",
-            stateProvince: "",
-            city: "",
-            zipPostalCode: "",
-            phone: "",
-            cardNumber: "",
-            expirationDate: "",
-            securityKey: "",
-        },
-      );
-      setTotalPrice(0);
-      setShippingPrice(0);
-      setSubTotalPrice(0);
-      dispatch(clearCart());
-      dispatch(stopSpinner());
-      setMessage(true);
-      setTimeout(() => {
-        setMessage(false);
-      }, 2000);
-    }, 2000);
-  }
+    const{firstName,lastName,email,streetAddress,stateProvince,city,zipPostalCode,phone} = data; 
+    const finalOrder = {
+        user_id: user?.id || null,
+        order_price: subTotalPrice,
+        customer_name: `${firstName} ${lastName}`,
+        customer_email: email,
+        shipping_address: `${streetAddress}, ${city}, ${stateProvince}, ${zipPostalCode}`,
+        order_items: finalProducts,
+        phone_number: phone,}
+    const { error } = await supabase.from('orders').insert(finalOrder);
+    if (error) {
+        dispatch(stopSpinner());
+        setLoadingMessage(true)
+        setMessage("There was an error processing your order. Please try again.");
+        setTimeout(() => {
+          setMessage("");
+          setLoadingMessage(false);
+        }, 3000);
+    } else {
+        setLoadingMessage(true);
+        setTotalPrice(0);
+        setSubTotalPrice(0);
+        setShippingPrice(0);
+        setShippingFree(false);
+        dispatch(stopSpinner());
+        dispatch(clearCart());
+        setFinalProducts([]);
+        reset();
+        setMessage("Congratulations! Your order is confirmed 🤍.");
+        setTimeout(() => {
+          setMessage("");
+          setLoadingMessage(false);
+        }, 3000);
+    }
+  } 
   return (
     <>
       <div className=" py-5 mt-8 flex flex-col  justify-center px-0 md:px-5 lg:px-10">
@@ -104,10 +114,80 @@ export default function CheckOut() {
             Safe & Secure Checkout • Fast Delivery Guaranteed
           </p>
         </div>
-        <div className="flex flex-col md:flex-row items-center gap-10 mt-10">
-          {/*Contact form */}
+        <div className="flex flex-col items-center gap-10 mt-10">
+          
           <div className="flex flex-col w-[100%] lg:grid lg:grid-cols-3 px-4 lg:px-0 gap-10 ">
-            {/*left side */}
+            {/*order review in mobile */}
+            <div className="lg:hidden collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2
+               dark:border-dark-neutral-400 mb-2">
+                <input type="checkbox" className="peer" />
+                <div className="collapse-title flex flex-col w-[100%] ">
+                  <p
+                    className="font-bold text-16 md:text-20 bg-transparent text-light-secondary-900 
+                                    dark:text-dark-secondary-300 font-playfair
+                                     dark:peer-checked:text-dark-neutral-800 peer-checked:text-light-neutral-50"
+                  >
+                    Order Review
+                  </p>
+                  <p className="text-12 md:text-14 bg-transparent text-light-secondary-500 dark:text-dark-secondary-700 font-playfai">
+                    {numberOfProducts} {numberOfProducts > 1 ? "items" : "item"}{" "}
+                    in a card
+                  </p>
+                </div>
+                <div className="w-[100%] collapse-content font-opensansw-[100%] text-14 lg:text-16 text-light-neutral-50  dark:text-dark-neutral-800">
+                  {/* Product Item */}
+                  {finalProducts?.map((product, index) => {
+                    return (
+                      <React.Fragment key={`${product.id}-${index}`}>
+                        <div className="flex gap-2 md:gap-3 py-5 border-b border-light-secondary-100 items-center">
+                          <img
+                            src={product.api_featured_image}
+                            alt={product.name}
+                            className="w-20 h-20 md:w-28 md:h-28 object-cover rounded-xl bg-light-secondary-50"
+                          />
+                          <div className="flex-1 space-y-1">
+                            <h3
+                              className="font-playfair font-bold text-light-secondary-500 
+                                dark:text-light-secondary-300 text-lg md:text-xl first-letter:uppercase"
+                            >
+                              {product.brand}
+                            </h3>
+                            <div className="flex flex-col justify-center gap-2">
+                              <p
+                                className="text-light-primary-800
+                                        dark:text-light-secondary-700 text-md md:text-lg first-letter:uppercase"
+                              >
+                                {product.product_type}
+                              </p>
+                              <div className="flex items-center gap-1 md:gap-2 ">
+                                {product.selectedColor?.hex_value &&
+                                  product.selectedColor?.color && (
+                                    <>
+                                      <div
+                                        className="w-4 h-4 border-light-primary-800 dark:border-light-neutral-50 border-[1px] md:w-5 md:h-5 rounded-full"
+                                        style={{
+                                          backgroundColor:
+                                            product.selectedColor.hex_value,
+                                        }}
+                                      ></div>
+                                      <p className="text-light-secondary-700  dark:text-light-secondary-500 text-xs md:text-lg first-letter:uppercase">
+                                        {product.selectedColor.color}
+                                      </p>
+                                    </>
+                                  )}
+                              </div>
+                              <p className="  text-dark-secondary-700 text-sm md:text-lg first-letter:uppercase">
+                                Number of products : {product.numberOfProduct}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+            {/* Billing address */}
             <div
               className="order-1  w-[100%] lg:col-span-2 lg:rounded-3xl lg:border-[3px] lg:border-gray-100
                         dark:lg:border-2 dark:lg:border-dark-neutral-400 p-0 lg:p-10"
@@ -411,10 +491,10 @@ export default function CheckOut() {
                 </form>
               </div>
             </div>
-
-            {/*right side */}
+            {/*Billing summary side */}
             <div className="lg:sticky lg:top-10 order-3 lg:order-2  lg:col-span-1 flex flex-col gap-3 ">
-              <div className="collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2 dark:border-dark-neutral-400 mb-2">
+              <div className="collapse collapse-arrow border-[3px] w-[100%]  border-gray-100 dark:border-2
+               dark:border-dark-neutral-400 mb-2">
                 <input type="checkbox" className="peer" />
                 <div className="collapse-title flex flex-col w-[100%] ">
                   <p
@@ -581,14 +661,13 @@ export default function CheckOut() {
                           <input
                             id="billing-form"
                             {...register("cardNumber", {
-                              required: "Card number is required",
-                              pattern: {
-                                value: /^[\d\s]{13,19}$/,
-                                message: "Invalid card number",
-                              },
+                              onChange: (e) => {
+                                const value = e.target.value.replace(/\D/g, "");
+                                e.target.value = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+                                }
                             })}
                             type="text"
-                            placeholder="1234 5678 9012 3456"
+                            placeholder="0000 0000 0000 0000"
                             className="w-full bg-transparent rounded-full pt-2 pb-2 pl-4
                                 placeholder:text-light-secondary-600 dark:placeholder:text-dark-secondary-500
                                 lg:text-16 text-14
@@ -685,10 +764,10 @@ export default function CheckOut() {
               </div>
             </div>
           </div>
-          {message && (
+          {loadingMessage && (
             <div className="toast ">
               <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 text-12 md:text-16 font-bold p-5">
-                <span>Congratulations! Your Order is Confirmed.🤍 </span>
+                <span>{message}</span>
               </div>
             </div>
           )}

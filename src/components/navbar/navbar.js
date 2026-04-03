@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function Navbar() {
   const navigate = useNavigate();
   const numberOfProducts = useSelector(store=>store.cart.productNumbers);
+  const numberOfWishListProducts = useSelector(store=>store.auth.number_of_items_in_wishlist);
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
   const isAuth = useSelector((store) => store.auth.isAuthenticated);
@@ -82,7 +83,7 @@ export default function Navbar() {
                     Blog
                   </NavLink>
                 </li>
-
+                
                 {!isAuth ? (
                   <Link to="login" onClick={() => closeDropdown()}>
                     <button
@@ -99,6 +100,27 @@ export default function Navbar() {
                   </Link>
                 ) : (
                   <>
+                  <li>
+                      {/*wishlist */}
+                    <div
+                      className=" md:hidden mb-1 mt-1
+                      flex items-center  cursor-pointer dark:border-dark-neutral-700
+                      hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
+                         transition-colors duration-200 
+                      "
+                      onClick={()=>{navigate("/wishlist")
+                        
+
+                        closeDropdown();
+                      
+                      }}
+                    >
+                      <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
+                      <p className="text-light-secondary-600 dark:text-dark-secondary-500 text-[19px] font-semibold">
+                        My Wishlist ({numberOfWishListProducts})
+                      </p>
+                    </div>
+                  </li>
                     <li className="text-light-secondary-600 dark:text-dark-secondary-500 font-opensans text-16 mb-1 ">
                       <NavLink
                         to={`/profile/${user.id}`}
@@ -113,7 +135,6 @@ export default function Navbar() {
                         </span>
                       </NavLink>
                     </li>
-
                     <button
                       onClick={() => {
                         dispatch(setLogout());
@@ -131,6 +152,7 @@ export default function Navbar() {
                         </span>
                       </Link>
                     </button>
+                    
                   </>
                 )}
             </ul>
@@ -164,8 +186,9 @@ export default function Navbar() {
         </div>
         {/* Cart and login */}
         <div className="mt-5 flex-[35%] flex items-center  md:pr-0 lg:pr-4 lg:gap-4 order-2 lg:order-3 lg:flex-[25%] lg:justify-end justify-evenly">
+         {/*cart */}
           <div
-            className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-xl border-light-secondary-50 border-[2px]
+            className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-full border-light-secondary-700 
             flex items-center justify-center cursor-pointer dark:border-dark-neutral-700
             hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
             p-6 md:p-5 text-center  transition-colors duration-200 relative
@@ -176,6 +199,7 @@ export default function Navbar() {
             -top-3 -right-0">{numberOfProducts}</p>
             <i className="fa-solid fa-cart-shopping text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
           </div>
+          
           {!isAuth ? (
             <Link to="login">
               <button
@@ -190,7 +214,22 @@ export default function Navbar() {
               </button>
             </Link>
           ) : (
-            <div className="hidden lg:flex md:flex w-14 h-14 rounded-full bg-pink-200 items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
+            <>
+            {/*wishlist */}
+              <div
+                className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] hidden rounded-full border-light-secondary-700 
+                md:flex items-center justify-center cursor-pointer dark:border-dark-neutral-700
+                hover:bg-light-secondary-300 hover:text-light-priamary-600 dark:hover:bg-dark-secondary-800
+                p-6 md:p-5 text-center  transition-colors duration-200 relative
+                "
+                onClick={()=>{navigate("/wishlist")}}
+              >
+                <p className="text-light-primary-400 dark:text-dark-primary-500 absolute text-[19px] font-semibold
+                -top-3 -right-0">{numberOfWishListProducts}</p>
+                <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
+              </div>
+            <div className="hidden lg:flex md:flex w-14 h-14 rounded-full c items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
+             
               <div
                 className="text-light-primary-600 font-bold text-24"
                 tabIndex={0}
@@ -204,16 +243,12 @@ export default function Navbar() {
                 dark:bg-dark-neutral-800 backdrop-blur-md border border-light-secondary-700 dark:border-white/10
                  rounded-2xl relative z-50 w-32 animate-in fade-in zoom-in duration-200"
               >
-                <li className="mb-1">
+                <li className="mb-1"
+                onClick={() => {closeDropdown(); navigate(`/profile/${user.id}`)}}>  
                   <button
                     className="!flex items-center gap-3 !px-4 !py-3 !rounded-xl text-slate-700 dark:text-pink-100
-                      hover:!bg-pink-500/20 active:!bg-pink-500/30 transition-colors duration-200"
-                    onClick={() => closeDropdown()}
-                  >
-                    <Link to={`profile/${user.id}`}>
-                      {" "}
+                      hover:!bg-pink-500/20 active:!bg-pink-500/30 transition-colors duration-200">
                       <span className="font-semibold text-sm">Profile</span>
-                    </Link>{" "}
                   </button>
                 </li>
                 <li>
@@ -235,6 +270,8 @@ export default function Navbar() {
                 </li>
               </ul>
             </div>
+            </>
+            
           )}
           <button
           onClick={() => ChangeTheme()}

@@ -130,14 +130,14 @@ export default function Cart() {
 
                         <div className="lg:w-1/3 sticky w-[100%] top-10 md:self-start">
                         <div className="mb-6 p-4 bg-transparent w-[100%] h-24
-                         dark:bg-dark-secondary-900 rounded-2xl border border-dashed border-light-secondary-300 text-center">
+                         rounded-2xl border border-dashed border-light-secondary-300 text-center ">
                             {shippingFree ? (
                                 <p className="text-green-600 font-bold flex items-center justify-center gap-2">
                                     <i className="fa-solid fa-truck-fast"></i>
                                     Congratulations! You've unlocked Free Shipping! 🥳
                                 </p>
                             ) : (
-                                <p className="text-light-secondary-700 dark:text-dark-secondary-300">
+                                <p className="text-light-secondary-700 dark:text-dark-secondary-300 flex items-center justify-center">
                                     Add <span className="font-bold text-light-secondary-500">
                                         {(10000 - subTotalPrice).toFixed(0)} EGP</span> more to get 
                                     <span className="font-bold"> FREE SHIPPING!</span>

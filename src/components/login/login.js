@@ -35,7 +35,7 @@ export default function Login() {
           return;
         }
         if (userData?.user) {
-          const [profileResponse, wishlistResponse] = await Promise.all([
+          const [profileResponse, wishlistResponse, ordersResponse] = await Promise.all([
             supabase
                 .from("users")
                 .select("name")
@@ -44,16 +44,22 @@ export default function Login() {
             supabase
                 .from("wishlist")
                 .select("product_Id") 
-                .eq('userId', userData.user.id)
+                .eq('userId', userData.user.id),
+            supabase
+                .from("orders")
+                .select("*") 
+                .eq('user_id', userData.user.id),
           ]);
 
           const { data: profileData } = profileResponse;
           const { data: wishlistData } = wishlistResponse;
+          const { data: ordersData } = ordersResponse;
           const nameToShow = profileData?.name || userData.user.email;
           const favoriteIds = wishlistData ? wishlistData.map(item => item.product_Id) : [];
           dispatch(setLogin({
             user:{ ...userData.user, userName: nameToShow },
-            wishList:favoriteIds
+            wishList:favoriteIds,
+            orders:ordersData || []
           }));
           reset();
           navigate(-1);
