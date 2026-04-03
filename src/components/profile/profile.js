@@ -89,7 +89,7 @@ export default function Profile() {
                     <div className="collapse-title text-md font-medium flex justify-between  pt-10 pr-2">
                       <div className="flex flex-col gap-4">
                         <span className=" text-light-secondary-800 dark:text-dark-secondary-700 font-bold">Order #{(Math.random()*1000).toFixed(0)}</span>
-                        <span className="text-light-secondary-600 font-bold">{order.order_price} EGP</span>
+                        <span className="text-light-secondary-600 font-bold">Price: {order.order_price} EGP</span>
                       </div>
                       <div className="text-md badge badge-outline border-dark-secondary-500
                        text-dark-secondary-500 uppercase tracking-tighter mt-1">
