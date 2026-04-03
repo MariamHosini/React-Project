@@ -46,5 +46,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { setLogin, setLogout,addToWishlistRedux,removeFromWishlistRedux,clearWishlist } = authSlice.actions;
+export const { setLogin, setLogout,addToWishlistRedux,removeFromWishlistRedux,clearWishlist,addOrder } = authSlice.actions;
 export default authSlice.reducer;
