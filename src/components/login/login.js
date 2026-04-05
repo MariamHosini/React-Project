@@ -57,7 +57,7 @@ export default function Login() {
           const nameToShow = profileData?.name || userData.user.email;
           const favoriteIds = wishlistData ? wishlistData.map(item => item.product_Id) : [];
           dispatch(setLogin({
-            user:{ ...userData.user, userName: nameToShow },
+            user:{ ...userData.user, name: nameToShow },
             wishList:favoriteIds,
             orders:ordersData || []
           }));

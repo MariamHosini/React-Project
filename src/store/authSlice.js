@@ -11,6 +11,9 @@ const authSlice = createSlice({
         number_of_orders:0
     },
     reducers: {
+        updateUser(state, action) {
+            state.user = action.payload;
+        },
         setLogin(state, action) {
             state.user = action.payload.user;
             state.wishList = action.payload.wishList;
@@ -46,5 +49,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { setLogin, setLogout,addToWishlistRedux,removeFromWishlistRedux,clearWishlist,addOrder } = authSlice.actions;
+export const { setLogin, setLogout,addToWishlistRedux,removeFromWishlistRedux,clearWishlist,addOrder ,updateUser} = authSlice.actions;
 export default authSlice.reducer;

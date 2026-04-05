@@ -127,11 +127,11 @@ export default function Navbar() {
                         onClick={() => closeDropdown()}
                       >
                         <span className="text-light-primary-600 font-bold text-16 rounded-full bg-light-secondary-100 dark:bg-pink-200  w-8 h-8 flex justify-center items-center">
-                          {user.userName?.charAt(0).toUpperCase()}
+                          {user.name?.charAt(0).toUpperCase()}
                         </span>
 
                         <span className="text-light-primary-600 dark:text-dark-secondary-300 font-bold">
-                          {user.userName}
+                          {user.name}
                         </span>
                       </NavLink>
                     </li>
@@ -235,7 +235,7 @@ export default function Navbar() {
                 tabIndex={0}
                 role="button"
               >
-                {user.userName?.charAt(0).toUpperCase()}
+                {user.name?.charAt(0).toUpperCase()}
               </div>
               <ul
                 tabIndex="1"
