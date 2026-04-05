@@ -3,9 +3,20 @@ import { useSelector } from "react-redux";
 export default function Profile() {
   const user = useSelector((state) => state.auth.user);
   const orders = useSelector((state) => state.auth.orders);
-  console.log(orders)
   const numberOfOrders = useSelector((state) => state.auth.number_of_orders);
   const numberOfWishlistitems = useSelector((state) => state.auth.number_of_items_in_wishlist);
+  const formatMyDate = (dateString) => {
+  const date = new Date(dateString);
+  
+  return date.toLocaleDateString('en', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true 
+  });
+};
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 animate-fadeIn">
       {/* 1. Header Section (Cover + Photo) */}
@@ -70,7 +81,7 @@ export default function Profile() {
           </div>
 
           {/* Recent Activity / Order History Placeholder */}
-          <div className="border border-neutral-100 dark:border-white/5 rounded-2xl p-6">
+          <div className="border border-neutral-100 dark:border-white/5 rounded-2xl p-3 md:p-6">
           <h3 className="text-xl font-serif font-bold text-light-secondary-700 dark:text-dark-secondary-300 mb-6">
             Recent Orders
           </h3>
@@ -78,31 +89,44 @@ export default function Profile() {
             <div className="text-center py-10">
               <p className="dark:text-dark-secondary-700 text-light-secondary-500  text-20 italic">You haven't placed any orders yet.</p>
             </div>
-          ) : (
-                <div className="space-y-2">
-                {orders.map((order) => (
+          ) : 
+                orders.map((order,index) => (
                   <div 
-                    key={order.id} 
-                    className="collapse collapse-arrow   border-[3px] border-light-secondary-700  rounded-xl"
+                    key={index} 
+                    className="collapse collapse-arrow   border-[3px] border-light-secondary-700  rounded-xl mb-4"
                   >
                     <input type="checkbox" className="peer" /> 
-                    <div className="collapse-title text-md font-medium flex justify-between  pt-10 pr-2">
-                      <div className="flex flex-col gap-4">
-                        <span className=" text-light-secondary-800 dark:text-dark-secondary-700 font-bold">Order #{(Math.random()*1000).toFixed(0)}</span>
-                        <span className="text-light-secondary-600 font-bold">Price: {order.order_price} EGP</span>
+                    <div className="collapse-title text-md font-medium flex flex-col pt-10 pr-2 pb-2 md:pb-0">
+                      <div className="flex justify-between">
+                          <div className="flex flex-col gap-4">
+                            <span className=" text-light-secondary-800 dark:text-dark-secondary-700 font-bold"
+                            >Order #{index+100}</span>
+                            <span className="text-light-secondary-600 dark:text-dark-secondary-300">
+                                <span className="text-light-secondary-900 dark:text-dark-secondary-700 font-bold">Price:</span> {order.order_price} EGP</span>
+                          </div>
+                          <div className="text-md badge badge-outline border-dark-secondary-500
+                          text-dark-secondary-500 uppercase tracking-tighter mt-1">
+                            {order.status || 'Processing'}
+                          </div>
                       </div>
-                      <div className="text-md badge badge-outline border-dark-secondary-500
-                       text-dark-secondary-500 uppercase tracking-tighter mt-1">
-                        {order.status || 'Processing'}
+                      <div className="flex flex-col">
+                          <span className=" text-light-secondary-600 dark:text-dark-secondary-300">
+                          <span className="text-light-secondary-900 dark:text-dark-secondary-700 font-bold">Address:</span> {order.shipping_address}</span>
+                        <span className=" text-light-secondary-600 dark:text-dark-secondary-300">
+                          <span className="text-light-secondary-900 dark:text-dark-secondary-700 font-bold">Phone number: </span> 
+                          {order.phone_number}</span>
+                        <span className=" text-light-secondary-600 dark:text-dark-secondary-300">
+                          <span className="text-light-secondary-900 dark:text-dark-secondary-700 font-bold">Created at: </span> 
+                          {formatMyDate(order.created_at)}</span>
                       </div>
                     </div>
                     <div className="collapse-content p-1 md:p-5 "> 
                       <div className=" ">
                         <h4 className="text-[12px] uppercase mb-2 text-light-neutral-500 tracking-widest font-bold">Ordered Items</h4>
                         
-                        {order.order_items.map((item, idx) => {
+                        {order.order_items.map((item,index) => {
                           return (
-                            <div key={idx} className="flex items-center gap-4 mb-5">
+                            <div key={`${index}`} className="flex items-center gap-4 mb-5">
                               <img src={item.api_featured_image} alt={item.product_name} className="w-20 h-20 rounded-lg object-cover" />
                               <div>
                                 <p className="text-md font-medium text-light-secondary-700 dark:text-dark-secondary-300
@@ -123,9 +147,9 @@ export default function Profile() {
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-</div>
+              
+            
+         </div>
         </div>
 
       </div>

@@ -107,7 +107,7 @@ async function toggleWishlist(pID) {
         {/*wishlist Message */}
        { message&&
         <div className="z-10 toast toast-end w-[40%] text-center">
-                <div className=" alert alert-info text-center flex items-center justify-center text-14  md:text-[18px] bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
+                <div className=" alert alert-info text-center flex items-center justify-center text-[18px] bg-light-secondary-700 text-light-secondary-50 font-bold p-5">
                     <span>{toastMessageBody}</span>
                 </div>
             </div>

@@ -773,7 +773,7 @@ export default function CheckOut() {
           </div>
           {loadingMessage && (
             <div className="toast ">
-              <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 text-12 md:text-16 font-bold p-5">
+              <div className="alert alert-info bg-light-secondary-700 text-light-secondary-50 text-14 md:text-16 font-bold p-5">
                 <span>{message}</span>
               </div>
             </div>
