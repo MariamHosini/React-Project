@@ -38,7 +38,7 @@ export default function Login() {
           const [profileResponse, wishlistResponse, ordersResponse] = await Promise.all([
             supabase
                 .from("users")
-                .select("name")
+                .select("name, imageURL")
                 .eq('id', userData.user.id)
                 .single(),
             supabase
@@ -55,9 +55,10 @@ export default function Login() {
           const { data: wishlistData } = wishlistResponse;
           const { data: ordersData } = ordersResponse;
           const nameToShow = profileData?.name || userData.user.email;
+          const image = profileData?.imageURL;
           const favoriteIds = wishlistData ? wishlistData.map(item => item.product_Id) : [];
           dispatch(setLogin({
-            user:{ ...userData.user, name: nameToShow },
+            user:{ ...userData.user, name: nameToShow, imageURL: image },
             wishList:favoriteIds,
             orders:ordersData || []
           }));

@@ -21,6 +21,7 @@ export default function Profile() {
   const [loadPicture, setLoadPicture] = useState(false);
   const [toastMessageBody, setToatMessageBody] = useState("");
   const [message, setMessage] = useState(false);
+  console.log(user)
   const numberOfWishlistitems = useSelector(
     (state) => state.auth.number_of_items_in_wishlist,
   );
