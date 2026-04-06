@@ -242,10 +242,10 @@ export default function Navbar() {
                 -top-3 -right-0">{numberOfWishListProducts}</p>
                 <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
               </div>
-            <div className="hidden overflow-hidden lg:flex md:flex w-14 h-14 rounded-full bg-pink-200 items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
+            <div className="hidden  lg:flex md:flex w-14 h-14 rounded-full bg-pink-200 items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
              
               <div
-                className="text-light-primary-600 font-bold text-24 "
+                className="text-light-primary-600 font-bold text-24 overflow-hidden rounded-full w-full h-full flex justify-center items-center"
                 tabIndex={0}
                 role="button"
               >
@@ -260,7 +260,6 @@ export default function Navbar() {
                   {user?.name?.charAt(0).toUpperCase()}
                 </span>
               )}
-
                 
               </div>
               <ul
