@@ -116,19 +116,33 @@ export default function Navbar() {
                       }}
                     >
                       <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
-                      <p className="text-light-secondary-600 dark:text-dark-secondary-500 text-[19px] font-semibold">
+                      <p className="text-light-secondary-600 dark:text-dark-secondary-500 text-[16px] font-semibold">
                         My Wishlist ({numberOfWishListProducts})
                       </p>
                     </div>
                   </li>
-                    <li className="text-light-secondary-600 dark:text-dark-secondary-500 font-opensans text-16 mb-1 ">
+                    <li className="overflow-hidden text-light-secondary-600 dark:text-dark-secondary-500 font-opensans text-16 mb-1 ">
                       <NavLink
                         to={`/profile/${user.id}`}
                         onClick={() => closeDropdown()}
                       >
-                        <span className="text-light-primary-600 font-bold text-16 rounded-full bg-light-secondary-100 dark:bg-pink-200  w-8 h-8 flex justify-center items-center">
-                          {user.name?.charAt(0).toUpperCase()}
-                        </span>
+                        <div className="text-light-primary-600 font-bold text-24 w-10 h-10 flex justify-center items-center bg-pink-200 overflow-hidden rounded-full"
+                              tabIndex={0}
+                              role="button"
+                            >
+                                {user?.imageURL ? (
+                              <img 
+                                src={user.imageURL} 
+                                alt="Profile" 
+                                className="w-full h-full object-cover" 
+                              />
+                            ) : (
+                              <span className="">
+                                {user?.name?.charAt(0).toUpperCase()}
+                              </span>
+                            )}
+
+                        </div>
 
                         <span className="text-light-primary-600 dark:text-dark-secondary-300 font-bold">
                           {user.name}
@@ -228,14 +242,26 @@ export default function Navbar() {
                 -top-3 -right-0">{numberOfWishListProducts}</p>
                 <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
               </div>
-            <div className="hidden lg:flex md:flex w-14 h-14 rounded-full bg-pink-200 items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
+            <div className="hidden overflow-hidden lg:flex md:flex w-14 h-14 rounded-full bg-pink-200 items-center justify-center shadow-soft backdrop-blur-md dropdown dropdown-bottom">
              
               <div
-                className="text-light-primary-600 font-bold text-24"
+                className="text-light-primary-600 font-bold text-24 "
                 tabIndex={0}
                 role="button"
               >
-                {user.name?.charAt(0).toUpperCase()}
+                  {user?.imageURL ? (
+                <img 
+                  src={user.imageURL} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover" 
+                />
+              ) : (
+                <span className="">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </span>
+              )}
+
+                
               </div>
               <ul
                 tabIndex="1"
