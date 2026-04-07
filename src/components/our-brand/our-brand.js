@@ -127,7 +127,7 @@ export default function ourBrand() {
             </div>
           </div>
           {/*Image */}
-          <div className="flex md:flex-row flex-col items-center gap-5 ">
+          <div className="flex md:flex-row flex-col items-center justify-end gap-5 ">
               <div
             className="w-[100%] h-full lg:w-[100%] flex items-end justify-center lg:rounded-br-[95rem] rounded-t-full  overflow-hidden "
             style={{ backgroundImage: `url(${backGround})` }}
@@ -138,11 +138,10 @@ export default function ourBrand() {
             ></img>
           </div>
           <div
-              className=" relative lg:hidden flex flex-col lg:flex-row md:px-7 items-center !bg-none lg:bg-light-primary-400 lg:bg-cover lg:bg-no-repeat 
+              className=" relative lg:hidden flex flex-col  md:px-7 items-center px-4
            lg:bg-center w-full  lg:h-[120px] rounded-none md:rounded-l-[40px]"
-              style={{ backgroundImage: `url(${image})` }}
             >
-              <div className="lg:w-[50%] flex justify-center  gap-3 mb-5 lg:mb-0">
+              <div className=" flex justify-center  gap-3 mb-5 lg:mb-0">
                 <div
                   className="flex items-center justify-center  
                xl:w-[70px] xl:h-[70px] xl:rounded-2xl xl:text-28 xl:p-2
@@ -173,7 +172,7 @@ export default function ourBrand() {
                   </p>
                 </div>
               </div>
-              <div className="lg:w-[50%] flex justify-center gap-3">
+              <div className=" flex justify-center items-end gap-3">
                 <div
                   className="flex items-center justify-center  
                xl:w-[70px] xl:h-[70px] xl:rounded-2xl xl:text-28 xl:p-2
