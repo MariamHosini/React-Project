@@ -58,7 +58,7 @@ export default function ourBrand() {
               </p>
             </div>
             <div
-              className=" relative flex flex-col lg:flex-row md:px-7 items-center !bg-none lg:bg-light-primary-400 lg:bg-cover lg:bg-no-repeat 
+              className=" relative hidden lg:flex flex-col lg:flex-row md:px-7 items-center !bg-none lg:bg-light-primary-400 lg:bg-cover lg:bg-no-repeat 
            lg:bg-center w-full  lg:h-[120px] rounded-none md:rounded-l-[40px]"
               style={{ backgroundImage: `url(${image})` }}
             >
@@ -127,7 +127,8 @@ export default function ourBrand() {
             </div>
           </div>
           {/*Image */}
-          <div
+          <div className="flex md:flex-row flex-col items-center">
+              <div
             className="w-[100%] lg:w-[40%]  flex items-end justify-center lg:rounded-br-[95rem] rounded-t-full  overflow-hidden "
             style={{ backgroundImage: `url(${backGround})` }}
           >
@@ -135,6 +136,75 @@ export default function ourBrand() {
               src={modelImage}
               alt="Beauty model showcasing femme flair makeup"
             ></img>
+          </div>
+          <div
+              className=" relative lg:hidden flex flex-col lg:flex-row md:px-7 items-center !bg-none lg:bg-light-primary-400 lg:bg-cover lg:bg-no-repeat 
+           lg:bg-center w-full  lg:h-[120px] rounded-none md:rounded-l-[40px]"
+              style={{ backgroundImage: `url(${image})` }}
+            >
+              <div className="lg:w-[50%] flex justify-center  gap-3 mb-5 lg:mb-0">
+                <div
+                  className="flex items-center justify-center  
+               xl:w-[70px] xl:h-[70px] xl:rounded-2xl xl:text-28 xl:p-2
+               lg:w-[60px] lg:h-[60px] lg:rounded-xl  lg:text-24 lg:p-2
+               md:w-[70px] md:h-[70px] md:rounded-2xl  md:text-28 text-18 md:p-4
+              w-[60px] h-[60px] rounded-2xl  text-20  p-4
+              dark:bg-dark-neutral-600 dark:text-dark-secondary-300
+               bg-light-secondary-100 text-light-secondary-900   font-playfair font-bold"
+                >
+                  +50
+                </div>
+                <div className="flex flex-col ">
+                  <h5
+                    className=" text-start font-bold font-playfair
+                text-light-secondary-900 lg:text-light-secondary-50
+                dark:text-dark-secondary-300 dark:lg:text-dark-neutral-700
+                xl:text-28  lg:text-20 md:text-24 text-20"
+                  >
+                    Product
+                  </h5>
+                  <p
+                    className=" font-opensans lg:w-[90%] text-start text-12
+                dark:text-dark-secondary-500 dark:lg:text-dark-neutral-600
+              text-light-secondary-600 lg:text-light-secondary-50 "
+                  >
+                    Transform your makeup routine with our innovative
+                    solutions.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:w-[50%] flex justify-center gap-3">
+                <div
+                  className="flex items-center justify-center  
+               xl:w-[70px] xl:h-[70px] xl:rounded-2xl xl:text-28 xl:p-2
+               lg:w-[60px] lg:h-[60px] lg:rounded-xl  lg:text-24 lg:p-2
+               md:w-[70px] md:h-[70px] md:rounded-2xl  md:text-28 text-18 md:p-4
+              w-[60px] h-[60px] rounded-2xl  text-20  p-4
+               dark:bg-dark-neutral-600 dark:text-dark-secondary-300
+               bg-light-secondary-100 text-light-secondary-900   font-playfair font-bold"
+                >
+                  +1K
+                </div>
+                <div className="flex flex-col">
+                  <h5
+                    className="text-start font-bold font-playfair
+                text-light-secondary-900 lg:text-light-secondary-50
+                dark:text-dark-secondary-300 dark:lg:text-dark-neutral-700
+                xl:text-28  lg:text-20 md:text-24 text-20"
+                  >
+                    Users
+                  </h5>
+                  <p
+                    className="font-opensans lg:w-[90%] text-start text-12
+                 dark:text-dark-secondary-500 dark:lg:text-dark-neutral-600
+              text-light-secondary-600 lg:text-light-secondary-50 "
+                  >
+                    Transform your makeup routine with our innovative
+                    solutions.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         {/*Experts */}

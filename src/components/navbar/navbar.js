@@ -27,7 +27,7 @@ export default function Navbar() {
   }
   return (
     <>
-      <div className=" transition-colors duration-500 ease-in-out sticky lg:relative top-0 bg-light-neutral-50 dark:bg-dark-neutral-800 z-[2000]  flex items-center lg:p-2 w-full max-w-full mb-3">
+      <div className=" transition-colors duration-500 ease-in-out sticky  top-0 pb-2 bg-light-neutral-50/90 backdrop-blur-sm dark:bg-dark-neutral-800/95 z-[2000]  flex items-center lg:p-2 w-full max-w-full mb-3">
         {/* Mobile menu */}
         <div className={`mt-5 flex-[7%] col-span-1 order-3 lg:hidden relative  `}  >
           <div className={`relative dropdown-end  `}>
@@ -91,9 +91,9 @@ export default function Navbar() {
 
                  bg-light-secondary-400 dark:bg-dark-secondary-800 dark:text-dark-primary-500 dark:border-dark-secondary-800
 
-                border-[2px] h-[50px] w-[100px] hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
+                border-[2px] h-[50px] w-[100%] hover:bg-light-secondary-200 hover:dark:bg-dark-secondary-700
 
-                  text-light-primary-400  font-bold font-playfair text-16"
+                  text-light-primary-400  font-bold font-playfair text-20"
                     >
                       Login
                     </button>
@@ -115,7 +115,7 @@ export default function Navbar() {
                       
                       }}
                     >
-                      <i className="fa-solid fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
+                      <i className="fa-regular fa-heart text-light-primary-400 text-[24px] md:text-[24px] dark:text-dark-primary-500 "></i>
                       <p className="text-light-secondary-600 dark:text-dark-secondary-500 text-[16px] font-semibold">
                         My Wishlist ({numberOfWishListProducts})
                       </p>
@@ -195,7 +195,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className=" flex-[53%] order-1  lg:justify-center lg:order-2 lg:flex-[28%]  ml-2 lg:ml-10 pt-3 md:ml-10">
           <Link to="/" className=" lg:navbar-center normal-case text-xl">
-            <img src={logo} alt="logo" className="  w-auto h-28" />
+            <img src={logo} alt="logo" className="  w-auto h-24" />
           </Link>
         </div>
         {/* Cart and login */}

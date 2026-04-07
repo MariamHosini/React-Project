@@ -22,6 +22,9 @@ export default function CheckOut() {
   const numberOfProducts = useSelector((store) => store.cart.productNumbers);
   const [loadingMessage, setLoadingMessage] = useState(false);
   const user = useSelector((store) => store.auth.user);
+      const[discount , setDiscount] = useState(0);
+  const isAuth = useSelector((store) => store.auth.isAuthenticated);
+  const orders = useSelector((store) => store.auth.orders);
   useEffect(() => {
     if (products_data && products_data != null) {
       const finalProducts = products_data.map((item) => {
@@ -43,21 +46,51 @@ export default function CheckOut() {
       const subprice = (prices * 50).toFixed(0);
       let shipping = 0;
       let finalPrice = 0;
-      if (subprice >= 10000) {
-        setShippingFree(true);
-        shipping = 0;
-        finalPrice = Number(subprice) + Number(shipping);
-        setShippingPrice(shipping);
-        setSubTotalPrice(subprice);
-        setTotalPrice(finalPrice);
-      } else {
-        setShippingFree(false);
-        shipping = (subprice * 0.1).toFixed(0);
-        finalPrice = Number(subprice) + Number(shipping);
-        setShippingPrice(shipping);
-        setSubTotalPrice(subprice);
-        setTotalPrice(finalPrice);
-      }
+      let calDiscount = 0;
+      if(subprice >= 10000 ){
+            if(isAuth && orders.length===0){
+                setShippingFree(true)
+                calDiscount = (0.2 *subprice).toFixed(0);
+                shipping=0;
+                finalPrice = Number(subprice) + Number(shipping) - calDiscount;
+                setDiscount(calDiscount)
+            setShippingPrice(shipping)
+            setSubTotalPrice(subprice)
+            setTotalPrice(finalPrice)
+            }
+            else{
+            setShippingFree(true)
+            calDiscount=0;
+            shipping=0;
+            finalPrice = Number(subprice) + Number(shipping);
+           setShippingPrice(shipping)
+           setSubTotalPrice(subprice)
+           setTotalPrice(finalPrice)
+             setDiscount(calDiscount)
+            }
+           }
+           else{
+            if(isAuth && orders.length===0){
+                setShippingFree(false)
+                calDiscount = (0.2 *subprice).toFixed(0);
+                shipping = (subprice * 0.1).toFixed(0);
+                finalPrice = Number(subprice) + Number(shipping) - calDiscount;
+                  setDiscount(calDiscount)
+            setShippingPrice(shipping)
+            setSubTotalPrice(subprice)
+            setTotalPrice(finalPrice)
+            }
+            else{
+            setShippingFree(false)
+            calDiscount=0;
+            shipping = (subprice * 0.1).toFixed(0);
+           finalPrice = Number(subprice) + Number(shipping);
+             setDiscount(calDiscount)
+           setShippingPrice(shipping)
+           setSubTotalPrice(subprice)
+           setTotalPrice(finalPrice)
+            }
+           }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products]);
@@ -91,6 +124,7 @@ export default function CheckOut() {
       dispatch(addOrder(finalOrder));
         setLoadingMessage(true);
         setTotalPrice(0);
+        setDiscount(0)
         setSubTotalPrice(0);
         setShippingPrice(0);
         setShippingFree(false);
@@ -580,9 +614,16 @@ export default function CheckOut() {
                       {subTotalPrice} EGP
                     </span>
                   </div>
+                   {(isAuth && orders.length===0)&&
+                                <div className="flex justify-between">
+                                <span className="text-green-800  font-bold">20% Discount</span>
+                                <span className="text-light-neutral-600 dark:text-dark-neutral-700 font-bold">-{discount} EGP</span>
+                            </div>
+
+                            }
                   <div className="flex justify-between">
                     <span className="text-light-primary-700 dark:text-light-primary-800">
-                      Estimated Shipping
+                       <i className="fa-solid fa-truck-fast text-green-800 font-bold text-20"></i> Shipping
                     </span>
                     <span className="text-green-800 font-bold">
                       {!shippingFree ? shippingPrice : "Free"}

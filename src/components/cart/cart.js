@@ -5,6 +5,8 @@ import { useEffect , useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {products} from '../../data/mock_data'
 export default function Cart() {
+    const isAuth = useSelector(store=>store.auth.isAuthenticated);
+    const orders = useSelector(store=>store.auth.orders);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const products_data = useSelector(store=>store.cart.productData);
@@ -14,6 +16,7 @@ export default function Cart() {
     const [subTotalPrice , setSubTotalPrice] = useState(0); 
     const[shippingPrice , setShippingPrice] = useState(0);
     const[shippingFree , setShippingFree] = useState(false);
+    const[discount , setDiscount] = useState(0);
     useEffect(()=>{
         if(products && products!=null){
             const finalProducts = products_data.map(item => {
@@ -27,23 +30,52 @@ export default function Cart() {
            setFinalProducts(finalProducts)
            const prices = finalProducts.reduce((accumilator,product)=>{return accumilator + (Number(product.numberOfProduct) * Number(product.price))},0)
            const subprice = (prices * 50).toFixed(0);
+           let calDiscount = 0;
            let shipping = 0;
           let finalPrice = 0;
-           if(subprice >= 10000){
+           if(subprice >= 10000 ){
+            if(isAuth && orders.length===0){
+                setShippingFree(true)
+                calDiscount = (0.2 *subprice).toFixed(0);
+                shipping=0;
+                finalPrice = Number(subprice) + Number(shipping) - calDiscount;
+                setDiscount(calDiscount)
+            setShippingPrice(shipping)
+            setSubTotalPrice(subprice)
+            setTotalPrice(finalPrice)
+            }
+            else{
             setShippingFree(true)
+            calDiscount=0;
             shipping=0;
             finalPrice = Number(subprice) + Number(shipping);
            setShippingPrice(shipping)
            setSubTotalPrice(subprice)
            setTotalPrice(finalPrice)
+             setDiscount(calDiscount)
+            }
            }
            else{
+            if(isAuth && orders.length===0){
+                setShippingFree(false)
+                calDiscount = (0.2 *subprice).toFixed(0);
+                shipping = (subprice * 0.1).toFixed(0);
+                finalPrice = Number(subprice) + Number(shipping) - calDiscount;
+                  setDiscount(calDiscount)
+            setShippingPrice(shipping)
+            setSubTotalPrice(subprice)
+            setTotalPrice(finalPrice)
+            }
+            else{
             setShippingFree(false)
+            calDiscount=0;
             shipping = (subprice * 0.1).toFixed(0);
            finalPrice = Number(subprice) + Number(shipping);
+             setDiscount(calDiscount)
            setShippingPrice(shipping)
            setSubTotalPrice(subprice)
            setTotalPrice(finalPrice)
+            }
            }
         }
     
@@ -138,9 +170,9 @@ export default function Cart() {
                                 </p>
                             ) : (
                                 <p className="text-light-secondary-700 dark:text-dark-secondary-300 flex items-center justify-center">
-                                    Add <span className="font-bold text-light-secondary-500">
+                                    Add <span className="font-bold text-light-secondary-500 px-1">
                                         {(10000 - subTotalPrice).toFixed(0)} EGP</span> more to get 
-                                    <span className="font-bold"> FREE SHIPPING!</span>
+                                    <span className="font-bold pl-1"> FREE SHIPPING!</span>
                                 </p>
                             )}
         
@@ -159,8 +191,16 @@ export default function Cart() {
                                 <span className="text-light-primary-700 dark:text-light-primary-900">Subtotal</span>
                                 <span className="text-light-neutral-600 dark:text-dark-neutral-700 font-bold">{subTotalPrice} EGP</span>
                             </div>
+                            {(isAuth && orders.length===0)&&
+                                <div className="flex justify-between">
+                                <span className="text-green-800  font-bold">20% Discount</span>
+                                <span className="text-light-neutral-600 dark:text-dark-neutral-700 font-bold">-{discount} EGP</span>
+                            </div>
+
+                            }
                             <div className="flex justify-between">
-                                <span className="text-light-primary-700 dark:text-light-primary-800">Estimated Shipping</span>
+                                <span className="text-light-primary-700 dark:text-light-primary-800">
+                                    <i className="fa-solid fa-truck-fast text-green-800 font-bold text-20"></i> Shipping</span>
                                 <span className="text-green-800 font-bold">{!shippingFree?shippingPrice: 'Free'}</span>
                             </div>
                             <hr className="border-light-secondary-200" />

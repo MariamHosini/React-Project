@@ -120,3 +120,20 @@ input:-webkit-autofill {
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
+.swiper-pagination-bullet {
+    background-color: #d1d5db !important; 
+    opacity: 0.6;
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #8f72d9 !important; 
+    width: 30px !important; 
+    border-radius: 5px !important;
+    opacity: 1;
+  }
+  .swiper-pagination {
+    bottom: 20px !important;
+  }
