@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="flex flex-col px-0 md:px-6 lg:px-6 mb-16 md:mb-18 lg:mb-32 gap-8">
       {/*Upper part */}
-      <div className="flex flex-col lg:flex-row gap-5 lg:gap-0 items-center w-full ">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-0 items-center w-full ">
         <div className="w-[100%] lg:w-[35%] flex flex-col gap-3 px-4 md:px-0 text-center lg:text-start items-center lg:items-start">
           <h1
             className="text-light-secondary-900 dark:text-dark-secondary-500
