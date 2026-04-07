@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import modelImage from "../../assets/model2.png";
 import backGround from "../../assets/bg.webp";
-import { NavLink } from "react-router-dom";
+
 export default function Home() {
   const navigate = useNavigate();
   return (
