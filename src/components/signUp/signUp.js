@@ -52,7 +52,7 @@ async function signUp(formData) {
 }
   return (
     <>
-      <contailer className='flex justify-center  items-center min-h-screen lg:pt-4 lg:pb-4 pb-6'>
+      <div className='flex justify-center  items-center min-h-screen lg:pt-4 lg:pb-4 pb-6'>
         <div className='flex w-[90%] lg:w-[45%] h-[83%] flex-col justify-between'>
           {/*Logo */}
           <div className='flex justify-center lg:justify-start w-[100%] lg:mt-0 mt-5 '>
@@ -207,7 +207,7 @@ async function signUp(formData) {
         <div className=' static hidden lg:flex lg:justify-center lg:items-end lg:w-[45%]  h-[700px] rounded-3xl bg-cover bg-no-repeat'style={{backgroundImage:`url(${signUpImage})`}}>
             
         </div>
-      </contailer>
+      </div>
     </>
   )
 }
