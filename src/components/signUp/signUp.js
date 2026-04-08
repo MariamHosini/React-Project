@@ -22,7 +22,9 @@ async function signUp(formData) {
   setErrorMessage(""); 
   try {
     dispatch(startSpinner());
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password ,
+      options:{emailRedirectTo: 'https://femme-flair1.vercel.app/login'}
+    });
     if (error) {
       switch (error.message) {
         case "User already registered":
