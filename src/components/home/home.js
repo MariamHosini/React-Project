@@ -367,11 +367,12 @@ function go_to_product(id){
         </div>
       </div>
       {/*FeaturedProducts */}
-        <h2 className="relative text-light-secondary-900 dark:text-dark-secondary-500
-            font-playfair font-bold text-32 lg:text-[36px] 
-            before:content-[''] before:block before:w-2 before:h-14
-               before:bg-dark-secondary-700 before:mb-3  mt-5 md:mt-10 lg:mt-12
+        <div  className="px-3">
+          <h2 className="relative text-light-secondary-900 dark:text-dark-secondary-500 font-playfair font-bold text-32 lg:text-[36px] 
+               before:content-[''] before:block before:w-2 before:h-14
+               before:bg-dark-secondary-700 before:mb-3 
               before:absolute  before:-left-3 ml-3">Featured products</h2>
+        </div>
              {isLoading ? (
         <div className="flex flex-col items-center justify-center py-20 w-full">
           <div className="w-12 h-12 border-4 border-light-secondary-100 border-t-light-secondary-800 dark:border-dark-secondary-500 dark:border-t-dark-neutral-800 rounded-full animate-spin"></div>
