@@ -169,7 +169,8 @@ export default function Cart() {
                                     Congratulations! You've unlocked Free Shipping! 🥳
                                 </p>
                             ) : (
-                                <p className="text-light-secondary-700 dark:text-dark-secondary-300 flex items-center justify-center">
+                                <p className="text-light-secondary-700 dark:text-dark-secondary-300 flex items-center justify-center text-12
+                                md:text-14 xl:text-16">
                                     Add <span className="font-bold text-light-secondary-500 px-1">
                                         {(10000 - subTotalPrice).toFixed(0)} EGP</span> more to get 
                                     <span className="font-bold pl-1"> FREE SHIPPING!</span>

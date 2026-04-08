@@ -164,7 +164,7 @@ function go_to_product(id){
               ></img>
             </div>
           </div>
-          <div className="flex-1  justify-end flex flex-col gap-3 px-4 md:px-0 text-center md:text-start items-center md:items-start">
+          <div className="flex-1  justify-end flex flex-col gap-3 px-4 md:px-0 text-center md:text-start items-center md:items-end">
             <div className=" flex justify-center  gap-3 mb-5 lg:mb-0">
               <div
                 className="flex items-center justify-center  
