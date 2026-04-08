@@ -154,7 +154,7 @@ function go_to_product(id){
         <div className="w-[100%] lg:w-[70%] sm:flex-row flex-col flex gap-4">
           <div className="flex-1 flex justify-center ">
             <div
-              className="w-[100%] lg:w-[70%]  rounded-t-full  h-[350px] flex justify-center items-end "
+              className="w-[100%] lg:w-[70%]  rounded-t-full h-[450px] sm:h-[350px] flex justify-center items-end "
               style={{ backgroundImage: `url(${backGround})` }}
             >
               <img
