@@ -127,7 +127,7 @@ export default function ourBrand() {
             </div>
           </div>
           {/*Image */}
-          <div className="flex md:flex-row flex-col items-center justify-end gap-5 ">
+          <div className="flex sm:flex-row flex-col items-end justify-end gap-5 ">
               <div
             className="w-[100%] h-full lg:w-[100%] flex items-end justify-center lg:rounded-br-[95rem] rounded-t-full  overflow-hidden "
             style={{ backgroundImage: `url(${backGround})` }}
